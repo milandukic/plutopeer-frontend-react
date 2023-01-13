@@ -1,0 +1,64 @@
+.nft-card-wrapper {
+    width: 240px;
+    height: 240px;
+    border: 3px solid;
+    border-radius: 10px;
+    display: block;
+    float: left;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+
+    .ultra-bar {
+        position: absolute;
+        background-color: #ffffff80;
+        padding: 5px 10px;
+        right: 0px;
+        border-bottom-left-radius: 16px;
+        color: darkcyan;
+        font-weight: 700;
+    }
+
+    .nft-image {
+        width: 240px;
+        height: 240px;
+        min-width: 240px;
+        min-height: 240px;
+        padding: 0px;
+        margin: -3px;
+        position: absolute;
+        aspect-ratio: 1;
+        transition: all 0.3s;
+    }
+
+    .nft-image:hover {
+        min-width: 300px;
+        min-height: 300px;
+        margin: -33px;
+        rotate: -15deg;
+        transition: all 0.5s;
+    }
+
+    .MuiSvgIcon-root {
+        color: white;
+        font-size: 42px;
+        position: absolute;
+        bottom: 5px;
+        right: 5px;
+    }
+
+    .staked-date {
+        position: absolute;
+        bottom: 0px;
+        left: 0px;
+        padding: 5px 10px;
+        background-color: #1b9700;
+        border-top-right-radius: 18px;
+        box-shadow: 0 0 20px 0 rgb(0 0 0 / 50%);
+
+        p {
+            margin: 0;
+            color: white;
+        }
+    }
+}

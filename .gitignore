@@ -1,0 +1,7 @@
+node_modules
+build
+.firebase
+firebase.json
+.firebaserc
+.git_old
+.git_new

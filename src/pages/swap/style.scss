@@ -1,0 +1,1030 @@
+.list-button-wrapper {
+  width: 100%;
+  padding: 0px 15px 10px 0px;
+  display: flex;
+  flex-direction: row;
+  justify-content: left;
+
+  button {
+    font-size: 1.5rem;
+    color: #23f06f;
+    font-weight: 700;
+    position: relative;
+    z-index: 0;
+    width: 100px;
+    height: 54px;
+    margin: 0;
+    padding: 0;
+    border-radius: 10px;
+    overflow: hidden;
+
+    &::before {
+      content: "";
+      position: absolute;
+      z-index: -2;
+      left: -13px;
+      top: -38px;
+      width: 120px;
+      height: 120px;
+      background-color: grey;
+      background-repeat: no-repeat;
+      background-position: 0 0;
+      background-image: conic-gradient(transparent, #23f06f, transparent 40%);
+      animation: rotate 4s linear infinite;
+    }
+
+    &::after {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      left: 3px;
+      top: 3px;
+      width: calc(100% - 6px);
+      height: calc(100% - 6px);
+      background: rgba(54, 54, 54, 1);
+      border-radius: 8px;
+    }
+  }
+
+  button:hover {
+    color: white;
+
+    &::before {
+      background-color: #23f06f;
+    }
+
+    &::after {
+      background-color: gray;
+    }
+  }
+}
+
+.swap-container {
+  height: calc(100vh - 160px);
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  position: relative;
+  background-color: black;
+
+  //**************created new css - start******************
+  .vertical-navigation {
+    // position: absolute;
+    // z-index: 10;
+    // right: 15px;
+    // top: 15px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    .list-button-wrapper {
+      width: auto;
+      padding-bottom: 0px;
+    }
+  }
+
+  
+  .search-sort-bar {
+    margin-top: 20px;
+
+    &.hidden {
+      visibility: hidden;
+    }
+
+    .MuiInputBase-root {
+      height: 55px;
+      color: white;
+      // font-size: 30px;
+
+      &.css-7mt4h1-MuiInputBase-root {
+        border: 1px solid white !important;
+        border-radius: 4px;
+      }
+    }
+
+    .css-1bvlvre {
+      height: 55px;
+      margin-top: 0px;
+    }
+
+    ///modified by 3
+    .sort-wrapper {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: right;
+      width: 20ch;
+      margin-right: 20px;
+
+      svg {
+        color: gray;
+      }
+
+      .css-1d3z3hw-MuiOutlinedInput-notchedOutline,
+      .css-14s5rfu-MuiFormLabel-root-MuiInputLabel-root {
+        border-color: #23f06f;
+        color: white;
+      }
+
+      .css-14lo706,
+      .css-190sipk,
+      .css-1sumxir-MuiFormLabel-root-MuiInputLabel-root {
+        color: white;
+      }
+    }
+  }
+
+  .menu-text {
+    width: 100%;
+    min-width: 100px;
+    color: gray;
+    margin-top: 40px;
+    text-align: center;
+
+    :first-child {
+      margin: 0px;
+    }
+
+    :last-child {
+      font-size: 10px;
+    }
+  }
+
+  .main-nav-logo {
+    position: fixed;
+    cursor: pointer;
+    z-index: 1;
+    left: 10px;
+    top: 0px;
+    width: 10%;
+    min-width: 100px;
+    height: 100px;
+    background-image: url(../../assets/imgs/navigation/logo.png);
+    background-size: 100px;
+    background-repeat: no-repeat;
+    background-position: top;
+  }
+
+  .main-nav-open {
+    position: fixed;
+    top: 50%;
+    z-index: 2;
+    margin-left: -10px;
+
+    .MuiSvgIcon-root {
+      font-size: 50px;
+      color: white;
+
+      &:hover {
+        color: #23f06f;
+        margin-left: 10px;
+      }
+    }
+  }
+
+  .css-ttn1xo {
+    padding: 0px;
+  }
+
+  .css-yfo96e {
+    margin: 0px;
+    padding: 0px;
+  }
+
+  .raffle-menu {
+    background-color: black;
+    width: 10%;
+    height: 100%;
+    min-width: 100px;
+    overflow-y: auto;
+    min-height: 320px;
+
+    &.menu-closed {
+      display: none;
+    }
+  }
+
+  .disp-page-tab {
+    padding-top: 50px;
+    background-color: #00000080;
+    width: 5%;
+    min-width: 100px;
+    margin: 0 auto;
+
+    &.hidden {
+      visibility: hidden;
+    }
+
+    .MuiButtonBase-root {
+      padding: 0;
+      color: white;
+
+      &:focus {
+        outline: none;
+      }
+
+      svg {
+        width: 42px;
+        height: 42px;
+      }
+
+      &.active {
+        div {
+          border-bottom: 3px solid #23f06f;
+        }
+      }
+
+      .HomeIcon {
+        background-image: url(../../assets/imgs/navigation/home.png);
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+        width: 57px;
+        height: 57px;
+        margin-bottom: 20px;
+      }
+
+      .WalletIcon {
+        background-image: url(../../assets/imgs/navigation/wallet.png);
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+        width: 50px;
+        height: 50px;
+        margin-bottom: 20px;
+      }
+
+      .PreviousIcon {
+        // background-image: url(../../assets/imgs/navigation/previous.png);
+        // background-size: contain;
+        // background-repeat: no-repeat;
+        // background-position: center;
+        width: 57px;
+        height: 57px;
+        margin-bottom: 20px;
+      }
+
+      .ClaimIcon {
+        background-image: url(../../assets/imgs/navigation/claim.png);
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+        width: 50px;
+        height: 50px;
+        margin-bottom: 20px;
+      }
+
+      .RedirectIcon {
+        background-image: url(../../assets/imgs/navigation/cdot.png);
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+        width: 60px;
+        height: 60px;
+        margin-bottom: 20px;
+      }
+    }
+
+    .MuiTabs-indicator {
+      height: 3px;
+      background-color: #23f06f;
+      visibility: hidden;
+    }
+  }
+
+  //**************created new css - end******************
+
+  //modified by 3
+  .refresh-data-button {
+    background-color: #5646fe;
+    padding: 0;
+    border-radius: 30px;
+    font-size: 55px;
+    color: white;
+    cursor: pointer;
+  }
+
+  .refresh-data-button:hover {
+    background-color: transparent;
+    color: #362545;
+  }
+
+  .space-between {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .swap-wrapper {
+    background-image: url("../../assets/imgs/unfocused-wallpaper.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: top;
+    width: 100%;
+    height: calc(100vh - 160px);
+    padding: 10px 15px 30px;
+    overflow-y: auto;
+    // position: relative;
+    min-height: 320px;
+    border: 1px solid grey;
+
+    .treasure-view-button {
+      width: 60px;
+      margin-right: 20px;
+      cursor: pointer;
+    }
+
+    .swap-page-header {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+
+      .page-title {
+        color: #23f06f;
+        text-transform: uppercase;
+        font-size: 36px;
+        font-weight: 700;
+        margin: 0;
+      }
+    }
+
+    .page-description {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+
+      p {
+        color: grey;
+        font-weight: 500;
+        margin: 0;
+      }
+
+      svg {
+        color: grey;
+        margin-right: 5px;
+      }
+    }
+
+    .active-nft-wrapper {
+      width: 100%;
+      margin-top: 20px;
+    }
+
+    .wallet-nft-wrapper {
+      width: 100%;
+      margin-top: 20px;
+    }
+
+    .swap-offer-wrapper {
+      width: 100%;
+      margin-top: 20px;
+
+      .single-swap-offer {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        float: left;
+        background-color: #373737;
+        border: 2px solid #3f35a3;
+        border-radius: 10px;
+
+        .swap-button-group-wrapper {
+          width: 100%;
+          display: flex;
+          flex-direction: row;
+          justify-content: space-around;
+          align-items: center;
+        }
+
+        .MuiSvgIcon-root.offer-svg {
+          width: 48px;
+          height: 48px;
+          color: #d19fff;
+        }
+
+        .listed-collection-card-wrapper {
+          border: none;
+          min-height: auto;
+        }
+
+        .offer-button-wrapper{
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+
+          .offer-svg{
+
+          }
+          
+          button{
+            background-color: transparent;
+
+            svg{
+              width:45px;
+              height: 45px
+            }
+          }
+        }
+
+        .nft-name-verify {
+          position: absolute;
+          background-color: rgba(54, 54, 54, 0.6);
+          // border-radius: 10px;
+          bottom: 0px;
+          width: 100%;
+        }
+        .nft-type {
+          display: none;
+        }
+
+        .card-info-str {
+          margin-top: 0px;
+          div:nth-child(1) {
+            display: none;
+          }
+          div:nth-child(2) {
+            display: none;
+          }
+
+          .list-button-wrapper {
+            // display: none;
+            a {
+              display: none;
+            }
+          }
+        }
+
+        h1 {
+          text-align: center;
+          font-size: 32px;
+          color: gray;
+          font-weight: 700;
+          margin: 8px auto 5px;
+        }
+
+        .approve-offer-button {
+          font-size: 14px;
+          color: #23f06f;
+          font-weight: 700;
+          position: relative;
+          z-index: 0;
+          width: 120px;
+          height: 42px;
+          margin: 8px 4px 0px;
+          padding: 0;
+          border-radius: 10px;
+          overflow: hidden;
+
+          &::before {
+            content: "";
+            position: absolute;
+            z-index: -2;
+            left: -15px;
+            top: -55px;
+            width: 150px;
+            height: 150px;
+            background-color: grey;
+            background-repeat: no-repeat;
+            background-position: 0 0;
+            background-image: conic-gradient(
+              transparent,
+              #23f06f,
+              transparent 40%
+            );
+            animation: rotate 4s linear infinite;
+          }
+
+          &::after {
+            content: "";
+            position: absolute;
+            z-index: -1;
+            left: 3px;
+            top: 3px;
+            width: calc(100% - 6px);
+            height: calc(100% - 6px);
+            background: #1b1b1b;
+            border-radius: 8px;
+          }
+        }
+
+        .delete-offer-button {
+          font-size: 14px;
+          color: #e76064;
+          font-weight: 700;
+          position: relative;
+          z-index: 0;
+          width: 120px;
+          height: 42px;
+          margin: 8px 4px 0px;
+          padding: 0;
+          border-radius: 10px;
+          overflow: hidden;
+
+          &::before {
+            content: "";
+            position: absolute;
+            z-index: -2;
+            left: -15px;
+            top: -55px;
+            width: 150px;
+            height: 150px;
+            background-color: grey;
+            background-repeat: no-repeat;
+            background-position: 0 0;
+            background-image: conic-gradient(
+              transparent,
+              #e76064,
+              transparent 40%
+            );
+            animation: rotate 4s linear infinite;
+          }
+
+          &::after {
+            content: "";
+            position: absolute;
+            z-index: -1;
+            left: 3px;
+            top: 3px;
+            width: calc(100% - 6px);
+            height: calc(100% - 6px);
+            background: #1b1b1b;
+            border-radius: 8px;
+          }
+        }
+
+        .approve-offer-button:hover {
+          color: white;
+
+          &::before {
+            background-color: #23f06f;
+          }
+
+          &::after {
+            background-color: gray;
+          }
+        }
+
+        .delete-offer-button:hover {
+          color: white;
+
+          &::before {
+            background-color: #e76064;
+          }
+
+          &::after {
+            background-color: gray;
+          }
+        }
+
+        .listed-collection-card-wrapper {
+          margin: 10px 8px !important;
+        }
+      }
+    }
+
+    .swap-claim-wrapper {
+      width: 100%;
+      margin-top: 20px;
+
+      .nft-type {
+        border-radius: 10px;
+        width: 40px;
+        border-color: transparent;
+      }
+
+      .non-border {
+        display: none !important;
+      }
+
+      .display-str-row {
+        display: none;
+      }
+
+      .nft-creator {
+        display: none;
+      }
+    }
+
+    h1 {
+      color: gray;
+      font-weight: 700;
+      margin: 0;
+    }
+  }
+
+  .swap-wrapper::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  .swap-wrapper::-webkit-scrollbar-track {
+    background-color: transparent;
+    border-radius: 100px;
+  }
+
+  .swap-wrapper::-webkit-scrollbar-thumb {
+    background-color: rgba(200, 200, 200, 0.5);
+    border-radius: 100px;
+  }
+}
+
+@keyframes opacityChange {
+  50% {
+    opacity: 0.5;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes rotate {
+  100% {
+    transform: rotate(1turn);
+  }
+}
+
+.my-nft-collection-view-dialog {
+  color: white;
+  .MuiPaper-root {
+    border-radius: 3%;
+    height: auto;
+    width: 90%;
+    // vertical-align: bottom;
+    padding: 15px;
+    background: linear-gradient(181deg, #8c11e7 0%, #5440eb 100%);
+    border-top: 5px solid #7b64a8;
+
+    .collection-wrapper {
+      max-width: 1250px;
+      width: 90%;
+      margin: auto;
+      display: flex;
+      flex-direction: column;
+
+      &.offer {
+        button {
+          bottom: 10px;
+        }
+      }
+    }
+
+    .footer-wrapper {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+
+      img {
+        width: 100px !important;
+        height: 100px !important;
+      }
+
+      button {
+        background-color: transparent;
+        border: solid 1px white;
+        padding: 0px;
+        margin: 50px 0 0 0;
+      }
+    }
+
+    .nft-collection-wrapper {
+      max-height: 80vh;
+      overflow-x: hidden;
+      overflow-y: auto;
+      .swap-content-wrapper {
+        .nft-name-verify {
+          position: absolute;
+          background: rgba(54, 54, 54, 0.5);
+          width: 80%;
+          right: 5px;
+          bottom: 20px;
+          border-radius: 30px;
+          position: absolute;
+        }
+
+        .verify-icon {
+          position: absolute;
+          left: 4px;
+          bottom: 20px;
+          margin: 0px;
+          padding: 0px;
+        }
+
+        .verify-icon-unticked {
+          position: absolute;
+          left: 4px;
+          bottom: 20px;
+          margin: 0px;
+          padding: 0px;
+        }
+
+        .entry-buy-wrapper {
+          display: none;
+        }
+      }
+    }
+
+    .nft-collection-wrapper::-webkit-scrollbar {
+      width: 5px;
+    }
+
+    .nft-collection-wrapper::-webkit-scrollbar-track {
+      background-color: transparent;
+      border-radius: 100px;
+    }
+
+    .nft-collection-wrapper::-webkit-scrollbar-thumb {
+      background-color: rgba(200, 200, 200, 0.5);
+      border-radius: 100px;
+    }
+
+    .collection-header {
+      display: flex;
+      flex-direction: row;
+      justify-content: left;
+      margin-bottom: 20px;
+      input {
+        color: #23f06f;
+        font-size: 20px;
+        margin-right: 20px;
+      }
+    }
+
+    .list-button-wrapper {
+      width: unset;
+      padding: 0px;
+
+      button {
+        font-size: 17px !important;
+        background-image: none !important;
+        background-color: transparent;
+      }
+    }
+  }
+
+  .MuiPaper-root::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  .MuiPaper-root::-webkit-scrollbar-track {
+    background-color: transparent;
+    border-radius: 100px;
+  }
+
+  .MuiPaper-root::-webkit-scrollbar-thumb {
+    background-color: rgba(200, 200, 200, 0.5);
+    border-radius: 100px;
+  }
+
+  h1 {
+    color: white;
+    font-weight: 700;
+    margin: 0;
+    text-align: center;
+    font-size: 30px;
+    text-transform: uppercase;
+  }
+}
+
+.collection-message-dialog {
+  .collection-memo {
+    color: white;
+  }
+
+  .MuiPaper-root {
+    color: wheat;
+    border-radius: 3%;
+    height: auto;
+    width: 100%;
+    height: 50%;
+    overflow: hidden;
+    background: linear-gradient(181deg, #8c11e7 0%, #5440eb 100%);
+
+    // border: 1px solid grey;
+    min-width: 70vh;
+    min-height: 554px;
+
+    .message-content {
+      height: calc(100% - 50px);
+      padding: 20px 20px 0 20px;
+      overflow-x: hidden;
+      overflow-y: auto;
+
+      div {
+        display: flex;
+        flex-direction: row;
+      }
+      p {
+        margin: 0 ;
+        color: white;
+        font-size: 20px;
+        font-weight: 600;
+      }
+    }
+
+    .message-content::-webkit-scrollbar {
+      width: 5px;
+    }
+
+    .message-content::-webkit-scrollbar-track {
+      background-color: transparent;
+      border-radius: 100px;
+    }
+
+    .message-content::-webkit-scrollbar-thumb {
+      background-color: rgba(200, 200, 200, 0.5);
+      border-radius: 100px;
+    }
+
+    .chatting-input-wrapper {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      padding: 0px 10px 0px 10px;
+
+      .collection-memo {
+        height: 30px;
+        width: 65%;
+        background-color: #373737;
+        margin-right: 10px;
+      }
+
+      svg{
+        cursor: pointer;
+        margin-right: 10px;
+        border-radius: 100%;
+        &:hover{
+          background-color: rgba(54,54,54,0.5);
+        }
+      }
+
+      p {
+        padding: 0;
+        margin: 0;
+        font-weight: 600;
+      }
+    }
+  }
+}
+
+.collection-swap-dialog {
+  .collection-memo {
+    width: 100%;
+    height: 80%;
+  }
+
+  .MuiPaper-root {
+    background-color: #1b1b1b;
+    border: 2px solid grey;
+    padding: 50px 15px 15px;
+    width: 554px;
+
+    .swap-button {
+      font-size: 16px;
+      color: #23f06f;
+      font-weight: 700;
+      position: absolute;
+      top: 10px;
+      left: calc(50% - 42px);
+      z-index: 100;
+      width: 84px;
+      height: 84px;
+      margin: 0;
+      padding: 0;
+      border-radius: 100%;
+      overflow: hidden;
+
+      &::before {
+        content: "";
+        position: absolute;
+        z-index: -2;
+        left: -3px;
+        top: -3px;
+        width: 100px;
+        height: 100px;
+        background-color: grey;
+        background-repeat: no-repeat;
+        background-position: 0 0;
+        background-image: conic-gradient(transparent, #23f06f, transparent 40%);
+        animation: rotate 4s linear infinite;
+      }
+
+      &::after {
+        content: "";
+        position: absolute;
+        z-index: -1;
+        left: 3px;
+        top: 3px;
+        width: calc(100% - 6px);
+        height: calc(100% - 6px);
+        background: #1b1b1b;
+        border-radius: 100%;
+      }
+    }
+
+    .swap-button:hover {
+      color: white;
+
+      &::before {
+        background-color: #23f06f;
+      }
+
+      &::after {
+        background-color: gray;
+      }
+    }
+  }
+}
+
+.first-pop-up-dialog {
+  .first-pop-up-wrapper {
+    background-color: #1b1222;
+    border: 2px solid grey;
+    padding: 30px 20px 20px;
+    color: white;
+
+    h1 {
+      font-size: 32px;
+      font-weight: 700;
+    }
+
+    p {
+      font-size: 16px;
+    }
+
+    button {
+      font-size: 16px;
+      color: #23f06f;
+      font-weight: 700;
+      position: absolute;
+      bottom: 30px;
+      right: 30px;
+      z-index: 100;
+      width: 84px;
+      height: 84px;
+      margin: 0;
+      padding: 0;
+      border-radius: 100%;
+      overflow: hidden;
+
+      &::before {
+        content: "";
+        position: absolute;
+        z-index: -2;
+        left: -3px;
+        top: -3px;
+        width: 100px;
+        height: 100px;
+        background-color: grey;
+        background-repeat: no-repeat;
+        background-position: 0 0;
+        background-image: conic-gradient(transparent, #23f06f, transparent 40%);
+        animation: rotate 4s linear infinite;
+      }
+
+      &::after {
+        content: "";
+        position: absolute;
+        z-index: -1;
+        left: 3px;
+        top: 3px;
+        width: calc(100% - 6px);
+        height: calc(100% - 6px);
+        background: #1b1b1b;
+        border-radius: 100%;
+      }
+    }
+
+    button:hover {
+      color: white;
+
+      &::before {
+        background-color: #23f06f;
+      }
+
+      &::after {
+        background-color: gray;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 618px) {
+  .collection-swap-dialog {
+    .MuiPaper-root {
+      width: 294px;
+    }
+  }
+}
+
+@media screen and (min-width: 1500px) {
+  .swap-wrapper {
+    position: unset;
+  }
+
+  .vertical-navigation {
+    right: calc((100vw - 1280px) / 2 - 90px);
+  }
+}

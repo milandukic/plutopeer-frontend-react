@@ -1,0 +1,69 @@
+.buyticket-dialog-container {
+  width: fit-content;
+
+  .buyticket-dialog-wrapper {
+    background: linear-gradient(181deg, #8c11e7 0%, #5440eb 100%) !important;
+    color: white;
+    padding: 5px 10px;
+    width: 310px;
+
+    .dialog-title {
+      padding: 10px 10px 5px;
+      border-bottom: 1px solid lightgray;
+      text-align: center;
+      p {
+        font-size: 18px;
+        font-weight: 700;
+        margin: 0;
+      }
+    }
+
+    .dialog-content {
+      padding: 10px 10px 5px;
+
+      p {
+        font-size: 14px;
+        font-weight: 500;
+        margin: 0;
+      }
+
+      .form-control {
+        margin-left: 10px;
+        border-radius: 5px;
+        width: 80px;
+        padding: 5px 5px 5px 10px;
+      }
+    }
+
+    .dialog-control {
+      padding: 10px 10px 5px;
+      display: flex;
+      justify-content: right;
+
+      button {
+        margin: 0 5px;
+        font-weight: 600;
+        padding: 10px 20px;
+        border-radius: 50px;
+      }
+
+      button:hover {
+        background-color: grey;
+        border: 1px solid grey;
+        color: white;
+      }
+
+      .btn-accept {
+        // background-color: #2cc149;
+        background-color:transparent;
+        border: 1px solid #2cc149;
+      }
+
+      .btn-cancel {
+        background-color: transparent;
+        border: 1px solid red;
+        color: red;
+      }
+    }
+  }
+}

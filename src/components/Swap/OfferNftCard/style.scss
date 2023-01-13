@@ -1,0 +1,190 @@
+.offer-nft-card-wrapper {
+  width: 100%;
+  height: 100%;
+  background: #373737;
+  border: 2px solid #7b64a8;
+  border-radius: 10px;
+  display: block;
+  float: left;
+
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+
+  .offer-nft-card-wrapper:hover {
+    .nft-image {
+      min-width: 240px;
+      margin: -52px -32px;
+      transition: all 0.5s;
+    }
+  }
+
+  .carousel-root {
+    width: 240px;
+    margin-bottom: 10px;
+
+    .control-dots {
+      bottom: 25px;
+    }
+
+    .control-arrow {
+      height: 208px;
+    }
+
+    .single-nft {
+      width: 240px;
+      height: 240px;
+
+      .nft-image {
+        width: 240px;
+        min-width: 240px;
+        min-height: 240px;
+        padding: 0px;
+        left: 240px;
+        position: absolute;
+        aspect-ratio: 1;
+      }
+    }
+  }
+
+  .nft-name-verify {
+    width: 100%;
+    height: 32px;
+    padding: 5px 10px;
+    text-align: center;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+
+    p {
+      margin: 0;
+      color: white;
+      font-size: 20px !important;
+      font-weight: 700;
+      direction: rtl;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      width: 185px;
+    }
+
+    .btn {
+      margin: 0px;
+      padding: 0px;
+      border-radius: 11px;
+      background-color: transparent;
+
+      svg {
+        color: white;
+        width: 22px;
+      }
+    }
+  }
+
+  .nft-option-bar {
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    position: relative;
+    margin-bottom: 20px;
+    align-items: center;
+    padding: 0 10px 0 10px;
+
+    p {
+      color: white;
+      font-size: 20px;
+      font-weight: 700;
+      margin: 0;
+    }
+
+    .verify-icon {
+      left: 0px;
+      color: white;
+      background-color: #24c149;
+      border-radius: 5px;
+      width: 24px;
+      height: 24px;
+      margin-right: 20px;
+    }
+
+    .verify-icon-unticked {
+      left: 0px;
+      border: 2px solid white;
+      border-radius: 5px;
+      width: 24px;
+      height: 24px;
+      margin-right: 20px;
+    }
+
+    .ticket-created {
+      padding: 5px 0 5px 10px;
+
+      .status-label {
+        color: #e5e760;
+      }
+    }
+  }
+
+  .list-button-wrapper {
+    justify-content: center !important;
+    width: 100%;
+    padding: 10px 15px 10px 0px;
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    background: #3e3e3e;
+
+    .swap-button {
+        font-size: 16px;
+        color: #23f06f;
+        font-weight: 700;
+        z-index: 100;
+        width: 54px;
+        height: 54px;
+        margin: 0;
+        padding: 0;
+        border-radius: 100%;
+        overflow: hidden;
+
+      &::before {
+        content: "";
+        position: absolute;
+        z-index: -2;
+        left: -3px;
+        top: -3px;
+        width: 100px;
+        height: 100px;
+        background-color: grey;
+        background-repeat: no-repeat;
+        background-position: 0 0;
+        background-image: conic-gradient(transparent, #23f06f, transparent 40%);
+        animation: rotate 4s linear infinite;
+      }
+
+      &::after {
+        content: "";
+        position: absolute;
+        z-index: -1;
+        left: 3px;
+        top: 3px;
+        width: calc(100% - 6px);
+        height: calc(100% - 6px);
+        background: #1b1b1b;
+        border-radius: 100%;
+      }
+    }
+
+    .swap-button:hover {
+      color: white;
+
+      &::before {
+        background-color: #23f06f;
+      }
+
+      &::after {
+        background-color: gray;
+      }
+    }
+  }
+}

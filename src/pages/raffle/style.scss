@@ -1,0 +1,400 @@
+.raffle-container {
+  height: calc(100vh - 160px);
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  position: relative;
+  background-color: black;
+
+  //**************created new css - start******************
+  .vertical-navigation {
+    // position: absolute;
+    z-index: 10;
+    right: 15px;
+    top: 15px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .search-sort-bar {
+    margin-top: 20px;
+
+    &.hidden {
+      visibility: hidden;
+    }
+
+    .MuiInputBase-root {
+      height: 55px;
+      color: white;
+      // font-size: 30px;
+
+      &.css-7mt4h1-MuiInputBase-root {
+        border: 1px solid white !important;
+        border-radius: 4px;
+      }
+    }
+
+    .css-1bvlvre {
+      height: 55px;
+      margin-top: 0px;
+    }
+
+    ///modified by 3
+    .sort-wrapper {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: right;
+      width: 20ch;
+      margin-right: 20px;
+
+      svg {
+        color: gray;
+      }
+
+      .css-1d3z3hw-MuiOutlinedInput-notchedOutline,
+      .css-14s5rfu-MuiFormLabel-root-MuiInputLabel-root {
+        border-color: #23f06f;
+        color: white;
+      }
+
+      .css-14lo706,
+      .css-190sipk,
+      .css-1sumxir-MuiFormLabel-root-MuiInputLabel-root {
+        color: white;
+      }
+    }
+  }
+
+  .menu-text {
+    width: 100%;
+    min-width: 100px;
+    color: gray;
+    margin-top: 40px;
+    text-align: center;
+
+    :first-child {
+      margin: 0px;
+    }
+
+    :last-child {
+      font-size: 10px;
+    }
+  }
+
+  .main-nav-logo {
+    position: fixed;
+    cursor: pointer;
+    z-index: 1;
+    left: 10px;
+    top: 0px;
+    width: 10%;
+    min-width: 100px;
+    height: 100px;
+    background-image: url(../../assets/imgs/navigation/logo.png);
+    background-size: 100px;
+    background-repeat: no-repeat;
+    background-position: top;
+  }
+
+  .main-nav-open {
+    position: fixed;
+    top: 50%;
+    z-index: 2;
+    margin-left: -10px;
+
+    .MuiSvgIcon-root {
+      font-size: 50px;
+      color: white;
+
+      &:hover {
+        color: #23f06f;
+        margin-left: 10px;
+      }
+    }
+  }
+
+  .css-ttn1xo {
+    padding: 0px;
+  }
+
+  .css-yfo96e {
+    margin: 0px;
+    padding: 0px;
+  }
+
+  .raffle-menu {
+    background-color: black;
+    width: 10%;
+    height: 100%;
+    min-width: 100px;
+    overflow-y: auto;
+    min-height: 320px;
+
+    &.menu-closed {
+      display: none;
+    }
+  }
+
+  .disp-page-tab {
+    padding-top: 50px;
+    background-color: #00000080;
+    width: 5%;
+    min-width: 100px;
+    margin: 0 auto;
+
+    &.hidden {
+      visibility: hidden;
+    }
+
+    .MuiButtonBase-root {
+      padding: 0;
+      color: white;
+
+      &:focus {
+        outline: none;
+      }
+
+      svg {
+        width: 42px;
+        height: 42px;
+      }
+
+      &.active {
+        div {
+          border-bottom: 3px solid #23f06f;
+        }
+      }
+
+      .HomeIcon {
+        background-image: url(../../assets/imgs/navigation/home.png);
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+        width: 57px;
+        height: 57px;
+        margin-bottom: 20px;
+      }
+
+      .WalletIcon {
+        background-image: url(../../assets/imgs/navigation/wallet.png);
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+        width: 50px;
+        height: 50px;
+        margin-bottom: 20px;
+      }
+
+      .PreviousIcon {
+        background-image: url(../../assets/imgs/navigation/previous.png);
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+        width: 57px;
+        height: 57px;
+        margin-bottom: 20px;
+      }
+
+      .ClaimIcon {
+        background-image: url(../../assets/imgs/navigation/claim.png);
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+        width: 50px;
+        height: 50px;
+        margin-bottom: 20px;
+      }
+
+      .RedirectIcon {
+        background-image: url(../../assets/imgs/navigation/cdot.png);
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+        width: 60px;
+        height: 60px;
+        margin-bottom: 20px;
+      }
+    }
+
+    .MuiTabs-indicator {
+      height: 3px;
+      background-color: #23f06f;
+      visibility: hidden;
+    }
+  }
+
+  //**************created new css - end******************
+
+  //modified by 3
+  .refresh-data-button {
+    background-color: #5646fe;
+    padding: 0;
+    border-radius: 3px;
+    color: white;
+    cursor: pointer;
+
+    img{
+        width:50px;
+        height:50px;
+    }
+  }
+
+  .refresh-data-button:hover {
+    background-color: #23f06f;
+    color: #362545;
+  }
+
+  .space-between {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .raffle-wrapper {
+    background-image: url("../../assets/imgs/unfocused-wallpaper.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: top;
+    width: 100%;
+    height: calc(100vh - 160px);
+    padding: 10px 15px 30px;
+    overflow-y: auto;
+    // position: relative;
+    min-height: 320px;
+    border: 1px solid grey;
+
+    .treasure-view-button {
+      width: 60px;
+      margin-right: 20px;
+      cursor: pointer;
+    }
+
+    .load-more-wrapper {
+      width: 240px;
+      height: 240px;
+      background: transparent;
+      border-radius: 10px;
+      display: block;
+      float: left;
+      padding: 10px 30px;
+      position: relative;
+      overflow: hidden;
+
+      button {
+        width: 180px;
+        height: 180px;
+        margin: 0;
+        padding: 0;
+        border-radius: 10px;
+        background-color: #1b1b1b;
+        border: 2px solid #b8b8b8;
+        color: white;
+
+        svg {
+          width: 100%;
+          height: 100%;
+        }
+      }
+
+      button:hover {
+        background-color: grey;
+      }
+    }
+
+    .pagination-wrapper {
+      display: flex;
+      flex-direction: row;
+      justify-content: right;
+      margin-top: 15px;
+
+      button {
+        background-color: white;
+      }
+
+      .Mui-selected {
+        border: 2px solid white;
+        color: white;
+        background-color: #252525;
+      }
+    }
+  }
+
+  .raffle-wrapper::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  .raffle-wrapper::-webkit-scrollbar-track {
+    background-color: transparent;
+    border-radius: 100px;
+  }
+
+  .raffle-wrapper::-webkit-scrollbar-thumb {
+    background-color: rgba(200, 200, 200, 0.5);
+    border-radius: 100px;
+  }
+  //modified by 3
+  .page-title {
+    color: #23f06f;
+    text-transform: uppercase;
+    font-size: 50px;
+    font-weight: 700;
+    margin: 0;
+  }
+
+  .disp-from-controllable-states {
+    width: 180px;
+
+    input {
+      color: #e5e760;
+      font-weight: 700;
+      pointer-events: none;
+    }
+
+    fieldset {
+      border: 2px solid #23f06f;
+    }
+
+    .MuiInputBase-root:hover {
+      fieldset {
+        border: 2px solid #23f06f;
+      }
+    }
+
+    label {
+      color: #23f06f;
+    }
+
+    button {
+      color: #23f06f;
+    }
+  }
+
+  .page-description {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    p {
+      color: grey;
+      font-weight: 500;
+      margin: 0;
+    }
+
+    svg {
+      color: grey;
+      margin-right: 5px;
+    }
+  }
+
+  .nft-disp-panel {
+    margin-top: 20px;
+
+    h1 {
+      margin-top: 50px;
+      color: gray;
+      font-weight: 700;
+    }
+  }
+}

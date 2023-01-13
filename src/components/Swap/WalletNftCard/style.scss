@@ -1,0 +1,192 @@
+.swap-nft-card-wrapper {
+  width: 240px;
+  // height: 450px;
+  background: #373737;
+  // border: 2px solid #3f35a3;
+  border-radius: 10px;
+  display: block;
+  float: left;
+  position: relative;
+  overflow: hidden;
+
+  cursor: pointer;
+
+  .swap-content-wrapper {
+    margin-top: 240px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px 5px 0px 5px;
+  }
+
+  .nft-name-verify {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+
+    p {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      direction: rtl;
+      font-size: 20px;
+    }
+
+    .btn {
+      margin: 0px;
+      padding: 0px;
+      border-radius: 11px;
+      background-color: transparent;
+
+      svg {
+        color: white;
+        width: 22px;
+      }
+    }
+  }
+
+  .overflow-view {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    direction: rtl;
+  }
+
+  .style-italic {
+    font-style: italic;
+  }
+
+  .color-red {
+    color: #ff5c5c;
+  }
+
+  .current-entry {
+    margin-right: 10px;
+    font-size: 14px;
+    color: #2cc149;
+  }
+
+  .nft-image {
+    width: 240px;
+    min-width: 240px;
+    min-height: 240px;
+    padding: 0px;
+    // background-color: #1b1b1b;
+    position: absolute;
+    aspect-ratio: 1;
+    transition: all 0.3s;
+  }
+
+  .verify-icon {
+    // position: absolute;
+    bottom: 12px;
+    left: 8px;
+    color: white;
+    background-color: #24c149;
+    border-radius: 5px;
+    width: 34px;
+    height: 34px;
+    margin: 20px;
+  }
+
+  .verify-icon-unticked {
+    // position: absolute;
+    bottom: 12px;
+    left: 8px;
+    border: 2px solid white;
+    border-radius: 5px;
+    width: 34px;
+    height: 34px;
+    margin: 20px;
+  }
+
+  p {
+    color: white;
+    font-size: 14px;
+    font-weight: 700;
+    margin: 0;
+  }
+
+  .ticket-created {
+    padding: 5px 0 5px 10px;
+
+    .status-label {
+      color: #e5e760;
+    }
+  }
+
+  .entry-view {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    p {
+      font-size: 12px;
+    }
+  }
+
+  .entry-buy-wrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: left;
+    background: #3e3e3e;
+    margin: 0px -10px 0px -10px;
+    width: 100%;
+
+    p {
+      font-size: 14px;
+    }
+
+    img {
+      width: 30px;
+      height: 30px;
+      cursor: pointer;
+      &:hover {
+        border: solid 1px hwb(231 26% 11%);
+        border-radius: 100%;
+      }
+    }
+
+    a {
+      background-color: transparent;
+      padding: 0 10px 0 10px;
+    }
+
+    .selected-token {
+      width: 120px;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-around;
+    }
+
+    button {
+      width: 100px;
+      padding: 0;
+      margin: 0 0 0 10px;
+      height: 40px;
+      border-radius: 10px;
+      background-color: transparent;
+      color: white;
+      text-transform: uppercase;
+      font-size: 15px;
+      font-weight: 700;
+      border: 2px solid hwb(246deg 30% 26%);
+    }
+
+    button:hover {
+      background-color: grey;
+      color: white;
+    }
+  }
+}
+
+.swap-nft-card-wrapper:hover {
+  .nft-image {
+    scale: 1.1;
+    transition: all 0.5s;
+  }
+}

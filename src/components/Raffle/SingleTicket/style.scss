@@ -1,0 +1,250 @@
+.single-ticket-wrapper {
+  
+  // background: #373737;
+  // border: 2px solid #7b64a8;
+  // border-radius: 10px;
+  display: block;
+  float: left;
+  // padding: 10px;
+  position: relative;
+  // overflow: hidden;
+
+  .single-sub-wrapper {
+    width: 240px;
+    min-height: 240px;
+    background: #373737;
+    border-radius: 10px;
+    display: block;
+    float: left;
+    padding: 10px 10px 0 10px;
+    position: relative;
+    overflow: hidden;
+    margin-right: 20px;
+    &.horizontal {
+      position: absolute;
+      z-index: 1;
+      border: none;
+      // margin: 5px 4px;
+      margin-right: 0px;
+    }
+  }
+
+  .color-primary {
+    color: #fff;
+  }
+
+  .color-secondary {
+    color: #2cc149;
+  }
+
+  .color-third {
+    color: rgb(143, 132, 132);
+  }
+
+  .style-italic {
+    font-style: italic;
+  }
+
+  .color-red {
+    color: #ff5c5c;
+  }
+
+  .color-ticket {
+    color: #373737;
+  }
+
+  .nft-token-icon {
+    align-items: center;
+    p {
+      white-space: nowrap;
+    }
+
+    img {
+      width: 15px;
+      height: 15px;
+      margin: 3px;
+    }
+  }
+
+  .nft-name-verify {
+    border-bottom: 2px solid #7b64a8;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+
+    &.horizontal {
+      margin-top: 240px;
+      border-bottom: none;
+    }
+
+    p {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      direction: rtl;
+      font-size: 20px;
+    }
+
+    .btn {
+      margin: 0px;
+      padding: 0px;
+      border-radius: 11px;
+      background-color: transparent;
+
+      svg {
+        color: white;
+        width: 22px;
+      }
+    }
+  }
+
+  .overflow-view {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    direction: rtl;
+  }
+
+  .current-entry {
+    margin-right: 10px;
+    font-size: 14px;
+    // color: #2cc149;
+  }
+
+  .nft-image {
+    width: 240px;
+    min-width: 240px;
+    min-height: 240px;
+    padding: 0px;
+    margin: -12px;
+    // background-color: #1b1b1b;
+    position: absolute;
+    aspect-ratio: 1;
+  }
+  
+  .ntf-live-roulette {
+    position: absolute;
+    top: 190px;
+    width: 110px;
+    height: 40px;
+    background-color: #373737;
+    border-radius: 30px;
+    opacity: 0.8;
+
+    .nft-live-image {
+      background-image: url(../../../assets/imgs/navigation/live.png);
+      background-repeat: no-repeat;
+      background-size: contain;
+      background-position: center;
+      border: 0px;
+      width: 40px;
+      height: 40px;
+      position: absolute;
+      left: 15px;
+      top: 0px;
+    }
+
+    .nft-roulette-image {
+      background-image: url(../../../assets/imgs/navigation/roulette.png);
+      background-repeat: no-repeat;
+      background-size: contain;
+      background-position: center;
+      background-color: transparent;
+      border: 0px;
+      width: 40px;
+      height: 40px;
+      position: absolute;
+      right: 15px;
+      top: 0px;
+
+      &:hover {
+        background-color: rgb(116, 104, 104, 0.5);
+      }
+    }
+  }
+
+  .verify-icon {
+    position: absolute;
+    top: 4px;
+    left: -42px;
+    color: white;
+    background-color: #24c149;
+    width: 120px;
+    box-shadow: 0 0 20px 0 rgb(0 0 0 / 50%);
+    height: 28px;
+    -webkit-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+  }
+
+  p {
+    color: white;
+    font-size: 14px;
+    font-weight: 700;
+    margin: 0;
+  }
+
+  .ticket-created {
+    padding: 5px 0 5px 10px;
+
+    .status-label {
+      color: #e5e760;
+    }
+  }
+
+  .entry-view {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    p {
+      font-size: 12px;
+    }
+  }
+
+  .entry-buy-wrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: right;
+    background: #3e3e3e;
+    margin: 0px -10px 0px -10px;
+    padding: 5px 0 5px 0;
+
+    p {
+      font-size: 12px;
+    }
+
+    a {
+      background-color: transparent;
+      padding: 0 10px 0 10px;
+    }
+
+    button {
+      width: 80px;
+      padding: 0;
+      margin: 0;
+      height: 40px;
+      border-radius: 10px;
+      background-color: transparent;
+      color: white;
+      text-transform: uppercase;
+      font-size: 28px;
+      font-weight: 700;
+      border: 2px solid hwb(246deg 30% 26%);
+
+      &.non-border{
+        border: none;
+      }
+    }
+
+    button:hover {
+      background-color: grey;
+      color: white;
+
+      &.non-border{
+        background-color: transparent;
+      }
+    }
+  }
+}

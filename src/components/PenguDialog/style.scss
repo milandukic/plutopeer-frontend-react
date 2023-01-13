@@ -1,0 +1,77 @@
+.css-1t1j96h-MuiPaper-root-MuiDialog-paper {
+  max-width: none !important;
+  background-color: transparent !important;
+}
+
+.pengu-dialog-container {
+  width: fit-content;
+
+  color: white;
+  background: linear-gradient(181deg, #8c11e7 0%, #5440eb 100%);
+  border-radius: 3%;
+
+  .pengu-dialog-wrapper {
+    padding: 5px 10px;
+    width: 60vw;
+    // max-width: 500px;
+    min-width: 300px;
+
+    .dialog-title {
+      padding: 10px 10px 5px;
+      border-bottom: 1px solid lightgray;
+
+      p {
+        font-size: 38px;
+        font-weight: 700;
+        margin-bottom: 30px;
+        text-align: center;
+      }
+    }
+
+    .dialog-content {
+      padding: 10px 10px 5px;
+
+      p {
+        font-size: 16px;
+        font-weight: 500;
+        margin: 0;
+      }
+    }
+
+    .dialog-control {
+      padding: 10px 10px 5px;
+      display: flex;
+      justify-content: space-between;
+
+      img{
+        width: 80px;
+        height: 80px;
+      }
+
+      button {
+        margin: 10px 5px 10px 5px;
+        font-weight: 600;
+        padding: 10px 20px;
+        font-size: 1.5rem;
+        border-radius: 10px;
+      }
+
+      button:hover {
+        background-color: grey;
+        border: 1px solid grey;
+        color: white;
+      }
+
+      .btn-accept {
+        background-color: transparent;
+        border: 1px solid #2cc149;
+      }
+
+      .btn-cancel {
+        background-color: transparent;
+        border: 1px solid red;
+        color: red;
+      }
+    }
+  }
+}
