@@ -26,7 +26,12 @@
       border: none;
       // margin: 5px 4px;
       margin-right: 0px;
+      
     }
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
   }
 
   .color-primary {

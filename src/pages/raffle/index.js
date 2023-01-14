@@ -304,34 +304,33 @@ function Raffle() {
 
   const autoAssociate = async (accountIds) => {
     try {
-      const loadAdminInfo = await global.getInfoResponse(
-        env.SERVER_URL + env.GET_ADMIN_INFO_PREFIX + `?type=hts`
-      );
+      const loadAdminInfo = await global.getAdminInfo("?type=hts");
 
       console.log(loadAdminInfo.data.data);
-      loadAdminInfo && loadAdminInfo.data.data.length &&
-        loadAdminInfo.data.data.map( (item, index) => {
-          console.log("loadAdminInfo", item);
-    
-          // setAdminInfo(adminInfo, loadAdminInfo.data.data);
-          // const tokenId = loadAdminInfo.data.data.tokenId;
-          // const associateState = await associateUpdateCheck(
-          //   accountIds[0],
-          //   tokenId
-          // );
-          // if (!associateState.result) {
-          //   console.log("Something wrong with Mirror Network.");
-          //   return;
-          // }
-          // if (associateState.associated) {
-          //   console.log("Already associated.");
-          //   return;
-          // }
-          // const associateResult = await associateToken(tokenId);
-          // if (associateResult) {
-          //   console.log("Associate successful.");
-          //   return;
-          // }
+      loadAdminInfo &&
+        loadAdminInfo.length &&
+        loadAdminInfo.map(async (item, index) => {
+          console.log("loadAdminInfo", loadAdminInfo);
+
+          setAdminInfo(adminInfo, loadAdminInfo);
+          const tokenId = item.tokenId;
+          const associateState = await associateUpdateCheck(
+            accountIds[0],
+            tokenId
+          );
+          if (!associateState.result) {
+            console.log("Something wrong with Mirror Network.");
+            return;
+          }
+          if (associateState.associated) {
+            console.log("Already associated.");
+            return;
+          }
+          const associateResult = await associateToken(tokenId);
+          if (associateResult) {
+            console.log("Associate successful.");
+            return;
+          }
           console.log("Associate failed.");
         });
     } catch (e) {
@@ -497,6 +496,10 @@ function Raffle() {
           const _startDateList = _winsHistory[i].startDate.split("T");
           const _endDataList = _winsHistory[i].createdAt.split("T");
 
+          const nftHotInfo = await global.getAdminInfo(
+            `?tokenId=${_winsHistory[i].tokenId}&type=hot`
+          );
+
           _newWinsNftInfo.push({
             tokenId: _winsHistory[i].tokenId,
             serialNum: _winsHistory[i].serialNum,
@@ -513,6 +516,7 @@ function Raffle() {
             price: _winsHistory[i].price,
             tokenSelId: _winsHistory[i].tokenSelId,
             nftSendProcess: _winsHistory[i].nftSendProcess,
+            nftHotInfo: nftHotInfo
           });
         }
       }
@@ -566,6 +570,10 @@ function Raffle() {
           const _startDateList = _raffleHistory[i].startDate.split("T");
           const _endDataList = _raffleHistory[i].createdAt.split("T");
 
+          const nftHotInfo = await global.getAdminInfo(
+            `?tokenId=${_singleNftInfo.tokenId}&type=hot`
+          );
+
           _newSoldNftInfo.push({
             tokenId: _singleNftInfo.tokenId,
             serialNum: _singleNftInfo.serialNum,
@@ -580,6 +588,7 @@ function Raffle() {
             startDate: _startDateList[0],
             endDate: _endDataList[0],
             price: _raffleHistory[i].price,
+            nftHotInfo: nftHotInfo
           });
         }
       }
@@ -671,9 +680,17 @@ function Raffle() {
           );
 
           if (!_findResult) {
+            const raffleLink =
+              "http://95.217.98.125:3000/raffle/" + _singleNftInfo._id;
+
+            const nftHotInfo = await global.getAdminInfo(
+              `?tokenId=${_singleNftInfo.tokenId}&type=hot`
+            );
+            const nftRaffleInfo = await global.getAdminInfo(
+              `?tokenId=${raffleLink}&type=discount`
+            );
             _newDbNftInfo.push({
-              raffleLink:
-                "https://dapp.deragods.com/raffle/" + _singleNftInfo._id,
+              raffleLink: raffleLink,
               accountId: _singleNftInfo.accountId,
               tokenId: _singleNftInfo.tokenId,
               serialNum: _singleNftInfo.serialNum,
@@ -691,6 +708,8 @@ function Raffle() {
               timeLeft: _timeLeft,
               myEntry: _myEntryCount,
               verified: false,
+              nftHotInfo: nftHotInfo,
+              nftRaffleInfo: nftRaffleInfo
             });
           }
         }
@@ -791,6 +810,10 @@ function Raffle() {
               console.log("getNftInfo log - 1 : ", _floorPrice);
             }
 
+            const nftHotInfo = await global.getAdminInfo(
+              `?tokenId=${_tokenId.tokenId}&type=hot`
+            );
+
             _newWalletNftInfo.push({
               tokenId: _tokenId,
               serialNum: _serialNum,
@@ -801,6 +824,7 @@ function Raffle() {
               fallback: _fallback,
               ticketCreated: false,
               verified: false,
+              nftHotInfo: nftHotInfo,
             });
           }
         }

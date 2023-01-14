@@ -191,7 +191,7 @@ function Main() {
 
         const addHotResult = await global.postInfoResponse(
           env.SERVER_URL + env.ADD_ONE_TO_ADMIN,
-          { tokenId: raffleLink, type: "hot" }
+          { tokenId: hotTokenId, type: "hot" }
         );
 
         console.log(addHotResult);

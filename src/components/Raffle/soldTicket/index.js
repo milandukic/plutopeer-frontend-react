@@ -137,6 +137,9 @@ const SoldTicket = ({ singleNftInfo, nftCardMargin }) => {
             <Button onClick={handleClose}>
               <CloseIcon />
             </Button>
+            <Button onClick={handleClose}>
+              <CloseIcon />
+            </Button>
           </Typography>
         </Box>
       </Modal>

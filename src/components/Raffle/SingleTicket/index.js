@@ -19,6 +19,7 @@ const SingleTicket = ({
   onClickBuyEntry,
   addRaffleFlag,
 }) => {
+  console.log("**********SingleTicket singleNftInfo", singleNftInfo);
   const { param_raffle_id } = useParams();
   const [horizontal, setHorizontal] = useState("horizontal");
   const [open, setOpen] = useState(false);
@@ -66,20 +67,17 @@ const SingleTicket = ({
   }, [tokenPrices]);
 
   useEffect(() => {
-    console.log("SingleTicket: addRaffleFlag changed", addRaffleFlag);
     getRaffleInfo();
   }, [addRaffleFlag]);
 
   useEffect(() => {
-    console.log("SingleTicket: ticketDataChanged", ticketData);
     getTicketInfo();
   }, [ticketData]);
 
   useEffect(() => {
-    console.log("SingleTicket, Init", ticketData);
     getTicketInfo();
   }, []);
-  
+
   const getTicketInfo = async () => {
     const raffleInfo = await global.getInfoResponse(
       env.SERVER_URL +
@@ -135,7 +133,6 @@ const SingleTicket = ({
   // singleNftInfo.timeLeft =
   //   singleNftInfo.timeLeft < 10000 ? 0 : singleNftInfo.timeLeft;
 
-  
   return (
     <>
       <div className={`single-ticket-wrapper`}>
@@ -146,7 +143,15 @@ const SingleTicket = ({
             src={singleNftInfo.imgUrl}
           ></video>
           <img className="nft-image" alt="..." src={singleNftInfo.imgUrl}></img>
-          <div className="nft-circle-logo"></div>
+          {
+            <div
+              className={
+                singleNftInfo.nftHotInfo.length
+                  ? "nft-circle-hot-logo"
+                  : "nft-circle-logo"
+              }
+            ></div>
+          }
           {participantsCount > 0 &&
             singleNftInfo.timeLeft >= 10000 &&
             singleNftInfo.timeLeft - 10000 <= 5 && (
@@ -160,7 +165,7 @@ const SingleTicket = ({
 
         <div className={`single-sub-wrapper`}>
           <div className={`nft-name-verify ${horizontal}`}>
-            <p>{`${singleNftInfo.creator} | ${singleNftInfo.name} #${singleNftInfo.serialNum}`}</p>
+            <p>{`${singleNftInfo.creator} | ${singleNftInfo.name} `}</p>
           </div>
           <div className="nft-token-icon d-flex row m-0">
             <p className="mr-1">Price/entry:</p>
@@ -198,7 +203,14 @@ const SingleTicket = ({
               <InfoIcon />
             </Button>
             <CopyToClipboard text={copyLink}>
-              <Button className="non-border" onClick={() => setCopyLink(singleNftInfo.raffleLink)}>
+              {/* <Button
+                className="non-border"
+                onClick={() => setCopyLink(singleNftInfo.raffleLink)}
+              > */}
+              <Button
+                className="non-border"
+                onClick={() => window.location.href = singleNftInfo.raffleLink}
+              >
                 <AssignmentReturnIcon />
               </Button>
             </CopyToClipboard>

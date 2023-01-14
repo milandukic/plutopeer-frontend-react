@@ -1,4 +1,5 @@
 import axios from "axios";
+import * as env from "env";
 export const getInfoResponse = async (urlStr_) => {
   try {
     return await axios.get(urlStr_);
@@ -42,6 +43,16 @@ export const getTokenPriceInfo = (token_id, tokenPrices) => {
   return returnPriceItem;
 };
 
+export const getAdminInfo = async (param) => {
+  const loadAdminInfo = await getInfoResponse(
+    env.SERVER_URL + env.GET_ADMIN_INFO_PREFIX + param
+  );
+
+  if (loadAdminInfo && loadAdminInfo.data.data.length)
+    return loadAdminInfo.data.data;
+  else return [];
+};
+
 export const getRequest = async (url) => {
   try {
     const res = await axios.get(url);
@@ -50,4 +61,3 @@ export const getRequest = async (url) => {
     return { result: false, error: error.message };
   }
 };
-
