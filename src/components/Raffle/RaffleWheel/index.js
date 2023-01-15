@@ -6,11 +6,11 @@ import "./style.scss";
 
 const RaffleWheel = ({ singleRaffle, onClose }) => {
   // console.log(">>>>>>>>>>>>>>>>>>>>RaffleWheel:", singleRaffle);
-  let resSec = parseInt(
+  let resSec = singleRaffle.timeLimit ? parseInt(
     (parseInt(singleRaffle.timeLimit * 3600 * 1000 + singleRaffle.createdTime) -
       Date.now()) /
       1000
-  );
+  ) : 0;
   // let resSec = 100;
 
   const [conRun, setConRun] = useState(false);
@@ -26,8 +26,9 @@ const RaffleWheel = ({ singleRaffle, onClose }) => {
   let timerHandle = 0;
 
   useEffect(() => {
+    if(singleRaffle && singleRaffle.participants)
     initData();
-    console.log("RaffleWheel useEffect[singleRaffle]", singleRaffle);
+
   }, [singleRaffle]);
 
   const initData = () => {
@@ -36,6 +37,8 @@ const RaffleWheel = ({ singleRaffle, onClose }) => {
     const num = partArray ? partArray.length : 0;
     setSegColors(getColors(num));
     setSegments(partArray);
+
+    console.log("RaffleWheel initData", partArray);
   };
 
   const onWheelFinished = (winner) => {

@@ -1,4 +1,4 @@
-import React, { useState , useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "reactstrap";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import Box from "@mui/material/Box";
@@ -32,7 +32,7 @@ const WinsTicket = ({ singleNftInfo, nftCardMargin, onClickSendRequest }) => {
   const tokenPrices = useSelector((state) => state.api.tokenPrices.payload);
   const totalTokenPrice =
     tokenPriceInfo?.priceUsd &&
-   ( Number(
+    (Number(
       parseFloat(singleNftInfo.price * tokenPriceInfo.priceUsd).toFixed(3)
     ) <= 0
       ? Number(
@@ -142,7 +142,9 @@ const WinsTicket = ({ singleNftInfo, nftCardMargin, onClickSendRequest }) => {
           >
             <p>{singleNftInfo.participants}</p>
           </Typography>
-          <Typography id="modal-modal-button" sx={{ mt: 1 }}>
+          <Typography id="modal-modal-button" sx={{ mt: 1 }} className="flex flex-row justify-center">            <Button onClick={handleClose}>
+              <p>HASH SCAN</p>
+            </Button>
             <Button onClick={handleClose}>
               <CloseIcon />
             </Button>

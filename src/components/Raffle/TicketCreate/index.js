@@ -5,10 +5,12 @@ import Dialog from "@mui/material/Dialog";
 import VerifiedIcon from "@mui/icons-material/Verified";
 import InfoIcon from "@mui/icons-material/Info";
 import * as global from "../../../global";
+import * as env from "../../../env";
 import "./style.scss";
 import { ToggleButton, ToggleButtonGroup } from "@mui/material";
 import { useHashConnect } from "../../../assets/api/HashConnectAPIProvider.tsx";
 import { useSelector } from "react-redux";
+import Checkbox from "@mui/material/Checkbox";
 
 const TicketCreate = ({
   singleNftInfo,
@@ -26,19 +28,36 @@ const TicketCreate = ({
   const [tokenDialog, setTokenDialog] = useState(false);
   const [tokenSelId, setTokenSelId] = useState("-1");
 
+  singleNftInfo.schedule = {
+    isWeeklyFee: false,
+    isRenewFee: false,
+    isDrawWhenSellout: false,
+    isDrawIfNotPay: false,
+  };
+
+  const [schedule, setSchedule] = useState(singleNftInfo.schedule);
+
   useEffect(() => {
     getTokenInfo();
   }, []);
+
+  const handleCheckedChange = (event, key) => {
+    console.log(schedule, schedule[key]);
+    const tempSchedule = { ...schedule };
+    tempSchedule[key] = event.target.checked;
+    setSchedule(tempSchedule);
+
+    console.log("*********************", key, tempSchedule, schedule);
+  };
 
   const handleChange = (event, nextView) => {
     console.log("TicketCreate:handleChange", nextView);
     setTokenSelId(nextView);
 
     if (nextView == null) {
-      setTokenSelId(-1)
+      setTokenSelId(-1);
       setTokenIconUrl(tokenInfos[0].icon);
-    }
-    else
+    } else
       setTokenIconUrl(
         tokenInfos.find((item, index) => item.token_id == nextView).icon
       );
@@ -59,7 +78,10 @@ const TicketCreate = ({
     }
 
     updateTokens.map((item, index) => {
-      const findPriceItem = global.getTokenPriceInfo(item.token_id, tokenPrices);
+      const findPriceItem = global.getTokenPriceInfo(
+        item.token_id,
+        tokenPrices
+      );
       if (findPriceItem != null) {
         item["icon"] = findPriceItem.icon;
         item["price"] = findPriceItem.price;
@@ -130,7 +152,7 @@ const TicketCreate = ({
         </Button>
         <div className="selected-token">
           <p>TOKEN:</p>
-          <img src={tokenIconUrl} onClick={() => setTokenDialog(true)}></img>
+          <Checkbox onClick={() => setTokenDialog(true)} checked></Checkbox>
         </div>
         <Button
           onClick={() =>
@@ -145,7 +167,8 @@ const TicketCreate = ({
               singleNftInfo.creator,
               singleNftInfo.name,
               singleNftInfo.imgUrl,
-              singleNftInfo.floorPrice
+              singleNftInfo.floorPrice,
+              schedule
             )
           }
         >
@@ -153,22 +176,22 @@ const TicketCreate = ({
         </Button>
       </div>
       <Dialog open={tokenDialog} onClose={() => setTokenDialog(false)}>
-        <div class="token-select-dialog">
-          <ToggleButtonGroup
-            orientation="vertical"
-            value={tokenSelId}
-            exclusive
-            onChange={handleChange}
-          >
-            {tokenInfos.map((item, index) => {
-              return (
-                <ToggleButton value={item.token_id} aria-label="list">
-                  <img src={item.icon}></img>
-                  {item.symbol}
-                </ToggleButton>
-              );
-            })}
-          </ToggleButtonGroup>
+        <div class="raffle-schedule-dialog">
+          <div className="dialog-title">
+            <p>WEEKLY TICKET</p>
+          </div>
+          {Object.keys(env.scheduleData).map((item, index) => {
+            return (
+              <div class="raffle-schedule-div">
+                <Checkbox
+                  inputProps={{ "aria-label": "Checkbox demo" }}
+                  checked = {schedule[item]}
+                  onChange={(e) => handleCheckedChange(e, item)}
+                />
+                <p>{env.scheduleData[item]} </p>
+              </div>
+            );
+          })}
         </div>
       </Dialog>
     </div>

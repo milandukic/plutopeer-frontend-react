@@ -12,14 +12,15 @@ import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import "./style.scss";
+import Checkbox from "@mui/material/Checkbox";
 
 const SingleTicket = ({
   singleNftInfo,
   nftCardMargin,
   onClickBuyEntry,
   addRaffleFlag,
+  ticketType,
 }) => {
-  console.log("**********SingleTicket singleNftInfo", singleNftInfo);
   const { param_raffle_id } = useParams();
   const [horizontal, setHorizontal] = useState("horizontal");
   const [open, setOpen] = useState(false);
@@ -93,7 +94,7 @@ const SingleTicket = ({
       singleNftInfo.participants = idArray;
       setParticipantCount(idArray.length);
       setAccountInfo({ ...singleNftInfo });
-      console.log("getTicketInfo", singleNftInfo);
+      console.log("******getTicketInfo", singleNftInfo);
     }
   };
 
@@ -130,9 +131,9 @@ const SingleTicket = ({
     setOpen(false);
   };
 
-  // singleNftInfo.timeLeft =
   //   singleNftInfo.timeLeft < 10000 ? 0 : singleNftInfo.timeLeft;
 
+  console.log(singleNftInfo);
   return (
     <>
       <div className={`single-ticket-wrapper`}>
@@ -146,15 +147,23 @@ const SingleTicket = ({
           {
             <div
               className={
-                singleNftInfo.nftHotInfo.length
+                singleNftInfo.nftHotInfo && singleNftInfo.nftHotInfo.length
                   ? "nft-circle-hot-logo"
+                  : singleNftInfo.nftRaffleInfo &&
+                    singleNftInfo.nftRaffleInfo.length
+                  ? "nft-circle-logo"
                   : "nft-circle-logo"
               }
-            ></div>
+            >
+              {singleNftInfo.nftRaffleInfo && singleNftInfo.nftRaffleInfo.length
+                ? -singleNftInfo.nftRaffleInfo[0].value
+                : ""}
+            </div>
           }
+
           {participantsCount > 0 &&
             singleNftInfo.timeLeft >= 10000 &&
-            singleNftInfo.timeLeft - 10000 <= 5 && (
+            singleNftInfo.timeLeft - 10000 <= env.MINUTE_RAFFLE_DELAY && (
               <div className="ntf-live-roulette">
                 <div className="nft-live-image" />
                 <div className="nft-roulette-image" onClick={handleJoinLive} />
@@ -194,36 +203,81 @@ const SingleTicket = ({
                 ? singleNftInfo.totalCount
                 : singleNftInfo.soldCount
             }/${singleNftInfo.totalCount}`}</p>
-            <p>{`Your entries: ${singleNftInfo.myEntry}`}</p>
           </div>
+          <div className="d-flex row m-0">
+            {ticketType == "buy" && (
+              <p>{`Your entries: ${singleNftInfo.myEntry}`}</p>
+            )}
+          </div>
+          {/* <div class="raffle-schedule-dialog transparent">
+            {Object.keys(env.scheduleData).map((item, index) => {
+              if (!singleNftInfo.schedule) return <></>;
+
+              return (
+                <div class="raffle-schedule-div">
+                  <Checkbox
+                    inputProps={{ "aria-label": "Checkbox demo" }}
+                    // {...jsonSchedule[item]}
+                    disabled
+                  />
+                  <p>{env.scheduleData[item]}</p>
+                </div>
+              );
+            })}
+          </div> */}
           <div className="entry-buy-wrapper">
-            <Button
-              href={`https://zuse.market/collection/${singleNftInfo.tokenId}`}
-            >
-              <InfoIcon />
-            </Button>
-            <CopyToClipboard text={copyLink}>
-              {/* <Button
+            {ticketType == "buy" && (
+              <>
+                <Button
+                  href={`https://zuse.market/collection/${singleNftInfo.tokenId}`}
+                >
+                  <InfoIcon />
+                </Button>
+                <CopyToClipboard text={copyLink}>
+                  {/* <Button
                 className="non-border"
                 onClick={() => setCopyLink(singleNftInfo.raffleLink)}
               > */}
+                  <Button
+                    className="non-border"
+                    onClick={() =>
+                      (window.location.href = singleNftInfo.raffleLink)
+                    }
+                  >
+                    <AssignmentReturnIcon />
+                  </Button>
+                </CopyToClipboard>
+                <Button href="https://twitter.com/DeragodsNFT">
+                  <TwitterIcon />
+                </Button>
+              </>
+            )}
+            {ticketType == "buy" ? (
               <Button
-                className="non-border"
-                onClick={() => window.location.href = singleNftInfo.raffleLink}
+                onClick={() =>
+                  onClickBuyEntry(
+                    singleNftInfo.tokenId,
+                    singleNftInfo.serialNum,
+                    "buy"
+                  )
+                }
               >
-                <AssignmentReturnIcon />
+                BUY
               </Button>
-            </CopyToClipboard>
-            <Button href="https://twitter.com/DeragodsNFT">
-              <TwitterIcon />
-            </Button>
-            <Button
-              onClick={() =>
-                onClickBuyEntry(singleNftInfo.tokenId, singleNftInfo.serialNum)
-              }
-            >
-              BUY
-            </Button>
+            ) : (
+              <Button
+                onClick={() =>
+                  onClickBuyEntry(
+                    singleNftInfo.tokenId,
+                    singleNftInfo.serialNum,
+                    "schedule",
+                    hdbarPriceInfo.priceUsd
+                  )
+                }
+              >
+                Extend
+              </Button>
+            )}
           </div>
         </div>
       </div>

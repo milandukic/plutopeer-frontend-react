@@ -113,11 +113,14 @@ function Raffle() {
     walletData,
     sendHbarAndNftToTreasury,
     sendTokenToTreasury,
+    sendHbarToTreasury,
     receiveNft,
     associateToken,
   } = useHashConnect(); // connect with hashpack wallet
   const { accountIds } = walletData; // get wallet data
 
+  const [scheduleInfo, setScheduleInfo] = useState([]);
+  const [scheduleDialog, setScheduleDialog] = useState(false);
   // get NFT from wallet
   const [nextLinkOfGetWalletNft, setNextLinkOfGetWalletNft] = useState(null);
   const [walletNftInfo, setWalletNftInfo] = useState([]);
@@ -210,6 +213,7 @@ function Raffle() {
 
   useEffect(() => {
     if (accountIds?.length > 0) {
+      getScheduleInfo();
       autoAssociate(accountIds);
 
       ws = new WebSocket(env.SOCKET_URL);
@@ -372,6 +376,10 @@ function Raffle() {
     }
   };
 
+  const closeScheduleDialog = () => {
+    setScheduleDialog(false);
+  };
+
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -516,7 +524,7 @@ function Raffle() {
             price: _winsHistory[i].price,
             tokenSelId: _winsHistory[i].tokenSelId,
             nftSendProcess: _winsHistory[i].nftSendProcess,
-            nftHotInfo: nftHotInfo
+            nftHotInfo: nftHotInfo,
           });
         }
       }
@@ -580,6 +588,7 @@ function Raffle() {
             name: _singleNftInfo.name,
             imgUrl: _singleNftInfo.imgUrl,
             creator: _singleNftInfo.creator,
+            schedule: _singleNftInfo.schedule,
             raffleCreator: _raffleHistory[i].accountId,
             winner: _raffleHistory[i].winnerId,
             participants: _raffleHistory[i].participants,
@@ -588,7 +597,7 @@ function Raffle() {
             startDate: _startDateList[0],
             endDate: _endDataList[0],
             price: _raffleHistory[i].price,
-            nftHotInfo: nftHotInfo
+            nftHotInfo: nftHotInfo,
           });
         }
       }
@@ -596,6 +605,51 @@ function Raffle() {
       setSoldNftInfo(_newSoldNftInfo);
       setRefreshFlag(!refreshFlag);
     } else setSoldNftInfo([]);
+
+    setLoadingView(false);
+  };
+
+  const getScheduleInfo = async () => {
+    if (!accountIds) return;
+    setLoadingView(true);
+
+    let _searchSuffix = "";
+
+    if (param_raffle_id)
+      _searchSuffix = _searchSuffix + "&_id=" + param_raffle_id;
+
+    const ticketInfo = await global.getInfoResponse(
+      env.SERVER_URL +
+        env.GET_ALL_PREFIX +
+        `?accountId=${accountIds[0]}${_searchSuffix}`
+    );
+
+    if (ticketInfo.data.result && ticketInfo.data.data.length) {
+      const findInfo = ticketInfo.data.data.filter((item, index) => {
+        item.schedule && (item.schedule = JSON.parse(item.schedule));
+
+        let timeRemain =
+          parseInt(item.timeLimit * 3600 * 1000 + item.createdTime) -
+          Date.now();
+
+        let timeLeft = parseInt(timeRemain / 3600 / 1000);
+        if (timeLeft <= 0) {
+          timeLeft = (parseInt(timeRemain / 60 / 1000) % 60) + 10000;
+        }
+
+        item.timeLeft = timeLeft;
+        console.log("************", item);
+        if (
+          (item.timeLimit <= 68 && item.schedule.isWeeklyFee) ||
+          item.schedule.isRenewFee
+        )
+          return timeLeft < env.MS_WEEK_TIME / 2;
+      });
+
+      console.log("getScheduleInfo***********", findInfo);
+      setScheduleDialog(findInfo.length);
+      setScheduleInfo(findInfo);
+    }
 
     setLoadingView(false);
   };
@@ -709,7 +763,7 @@ function Raffle() {
               myEntry: _myEntryCount,
               verified: false,
               nftHotInfo: nftHotInfo,
-              nftRaffleInfo: nftRaffleInfo
+              nftRaffleInfo: nftRaffleInfo,
             });
           }
         }
@@ -1047,7 +1101,7 @@ function Raffle() {
     }
   };
 
-  const onClickBuyEntry = async (tokenId_, serialNum_) => {
+  const onClickBuyEntry = async (tokenId_, serialNum_, schedule, priceUsd) => {
     // console.log("onClickBuyEntry log - 1 : ", tokenId_, serialNum_);
     if (!accountIds) {
       toast.warning("You have to connect wallet to buy entry.");
@@ -1058,19 +1112,64 @@ function Raffle() {
     //     alert(`You have to associate ${tokenId_}`);
     //     return;
     // }
-    let _tempTicketInfo = dbNftInfo.filter(
-      (tempTicketInfo) =>
-        tempTicketInfo.tokenId === tokenId_ &&
-        tempTicketInfo.serialNum === serialNum_
-    );
-    // console.log("onClickBuyEntry log - 2 : ", _tempTicketInfo);
-    if (_tempTicketInfo.length > 0) setCurrentBuyTicketData(_tempTicketInfo[0]);
-    displayPenguDialog(
-      "Terms & Conditions",
-      "1. Confirm the collection by clicking the i button on the right corner of the raffle display.<br />2. If the collection is listed on marketplaces, it is a verified collection. If otherwise, do due diligence before proceeding to purchase tickets.<br />3. Raffles shall not assume any liability or responsibility for any collection.<br />4. Raffles cannot refund ticket(s) when bought.<br />5. You can only buy 20% of the total tickets.",
-      "AGREE",
-      "buy-ticket"
-    );
+
+    if (schedule == "buy") {
+      let _tempTicketInfo = dbNftInfo.filter(
+        (tempTicketInfo) =>
+          tempTicketInfo.tokenId === tokenId_ &&
+          tempTicketInfo.serialNum === serialNum_
+      );
+      // console.log("onClickBuyEntry log - 2 : ", _tempTicketInfo);
+      if (_tempTicketInfo.length > 0)
+        setCurrentBuyTicketData(_tempTicketInfo[0]);
+      displayPenguDialog(
+        "Terms & Conditions",
+        "1. Confirm the collection by clicking the i button on the right corner of the raffle display.<br />2. If the collection is listed on marketplaces, it is a verified collection. If otherwise, do due diligence before proceeding to purchase tickets.<br />3. Raffles shall not assume any liability or responsibility for any collection.<br />4. Raffles cannot refund ticket(s) when bought.<br />5. You can only buy 20% of the total tickets.",
+        "AGREE",
+        "buy-ticket"
+      );
+    } else if (schedule == "schedule") {
+      setLoadingView(true);
+
+      try {
+        const amount = parseFloat(3 / priceUsd);
+        // const amount = 1;
+        console.log("onClickBuyEntry", amount, priceUsd);
+
+        const transactionResult = await sendHbarToTreasury(amount);
+
+        if (!transactionResult) {
+          toast.error("A problem occurred. Please try again.");
+          setLoadingView(false);
+          return;
+        }
+
+        const postData = {
+          accountId: accountIds[0],
+          tokenId: tokenId_,
+          serialNum: serialNum_,
+          amount: amount,
+        };
+
+        console.log("onClickBuyEntry log - 6 : ", postData);
+
+        const result = await global.postInfoResponse(
+          env.SERVER_URL + env.UPDATE_SCHEDULE_INFO,
+          postData
+        );
+
+        console.log("onClickBuyEntry log - 7 : ", result);
+
+        if (!result?.data.result) {
+          toast.error("A problem occurred. Please try again.");
+        } else toast.success("Ticket extend successful!");
+      } catch (e) {
+        setLoadingView(false);
+        console.log(e);
+        toast.error("A problem occured. Please check your balances.");
+      }
+      setLoadingView(false);
+    }
   };
 
   const tokenAssociateCheck = async (accountId_, tokenId_) => {
@@ -1150,7 +1249,8 @@ function Raffle() {
     creator_,
     name_,
     imgUrl_,
-    floorPrice_
+    floorPrice_,
+    schedule
   ) => {
     setLoadingView(true);
     console.log(
@@ -1197,6 +1297,7 @@ function Raffle() {
       name: name_,
       imgUrl: imgUrl_,
       floorPrice: floorPrice_,
+      schedule: schedule,
     };
 
     setCurrentCreateTicketPostData(_postData);
@@ -1207,6 +1308,7 @@ function Raffle() {
       "AGREE",
       "create-tickets"
     );
+    setLoadingView(false);
   };
 
   const associateCheck = async (_tokenId, operatorId) => {
@@ -1425,6 +1527,7 @@ function Raffle() {
       return;
     }
 
+    console.log("*********************", postData_);
     const _postResult = await global.postInfoResponse(
       env.SERVER_URL + env.CREATE_TICKET_PREFIX,
       postData_
@@ -1708,6 +1811,7 @@ function Raffle() {
                     nftCardMargin={dbNftCardMargin}
                     onClickBuyEntry={onClickBuyEntry}
                     addRaffleFlag={addRaffleFlag}
+                    ticketType="buy"
                   />
                 );
               })}
@@ -1784,7 +1888,7 @@ function Raffle() {
       <Backdrop
         sx={{
           color: "#fff",
-          zIndex: (theme) => (loadingView ? theme.zIndex.drawer + 1 : -1),
+          zIndex: (theme) => (loadingView ? 10000 : -1),
           backgroundColor: "#000",
         }}
         open={loadingView}
@@ -1810,6 +1914,25 @@ function Raffle() {
           onClickDialogAgreeBtn={onClickBuyTicketDialogAgreeBtn}
           onClickDialogCloseBtn={buyTicketDialogClose}
         />
+      </Dialog>
+
+      <Dialog open={scheduleDialog} onClose={() => closeScheduleDialog()}>
+        <div className="nft-disp-panel schedule-panel">
+          <div className="dialog-title">
+            <p>WEEKLY TICKET</p>
+          </div>
+          {scheduleInfo.length > 0 &&
+            scheduleInfo.map((item, index_) => {
+              return (
+                <SingleTicket
+                  singleNftInfo={item}
+                  nftCardMargin={dbNftCardMargin}
+                  onClickBuyEntry={onClickBuyEntry}
+                  ticketType="schedule"
+                />
+              );
+            })}
+        </div>
       </Dialog>
       <ToastContainer autoClose={3000} draggableDirection="x" />
     </>

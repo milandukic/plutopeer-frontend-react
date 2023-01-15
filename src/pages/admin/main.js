@@ -133,7 +133,7 @@ function Main() {
         }
 
         const addBlackResult = await global.postInfoResponse(
-          env.SERVER_URL + env.ADD_ONE_TO_ADMIN,
+          env.SERVER_URL + env.UPDATE_DATA_TO_ADMIN,
           { tokenId: blackTokenId }
         );
 
@@ -166,7 +166,7 @@ function Main() {
         }
 
         const addHtsResult = await global.postInfoResponse(
-          env.SERVER_URL + env.ADD_ONE_TO_ADMIN,
+          env.SERVER_URL + env.UPDATE_DATA_TO_ADMIN,
           { tokenId: htsTokenId, type: "hts" }
         );
 
@@ -190,7 +190,7 @@ function Main() {
         }
 
         const addHotResult = await global.postInfoResponse(
-          env.SERVER_URL + env.ADD_ONE_TO_ADMIN,
+          env.SERVER_URL + env.UPDATE_DATA_TO_ADMIN,
           { tokenId: hotTokenId, type: "hot" }
         );
 
@@ -207,7 +207,7 @@ function Main() {
         }
 
         const addDiscountResult = await global.postInfoResponse(
-          env.SERVER_URL + env.ADD_ONE_TO_ADMIN,
+          env.SERVER_URL + env.UPDATE_DATA_TO_ADMIN,
           { tokenId: raffleLink, type: "discount", value: raffleDiscount }
         );
 

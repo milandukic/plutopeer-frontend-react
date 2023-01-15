@@ -18,7 +18,8 @@
     padding: 10px;
 
     p {
-      overflow: hidden;      white-space: nowrap;
+      overflow: hidden;
+      white-space: nowrap;
       text-overflow: ellipsis;
       direction: rtl;
       font-size: 20px;
@@ -202,5 +203,42 @@
     color: #2cc149 !important;
     border: 2px solid hwb(246deg 30% 26%);
   }
-  
+}
+
+.raffle-schedule-dialog {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  color: white;
+  font-weight: 600;
+  background: linear-gradient(181deg, #8c11e7 0%, #5440eb 100%) !important;
+  padding: 10px;
+
+  .dialog-title {
+    padding: 10px 10px 5px;
+    width: 100%;
+    p {
+      text-transform: uppercase;
+      color: white;
+      font-size: 38px;
+      font-weight: 700;
+      text-align: center;
+    }
+  }
+
+  .raffle-schedule-div {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+
+    p {
+      padding: 0;
+      margin: 0;
+    }
+  }
+
+  &.transparent {
+    background: transparent !important;
+  }
 }

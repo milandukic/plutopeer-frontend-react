@@ -172,7 +172,6 @@
     }
   }
 
-
   .entry-buy-wrapper {
     display: flex;
     flex-direction: row;
@@ -240,9 +239,21 @@
   }
 
   #modal-modal-button {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
     text-align: right;
 
-    button {
+    button:nth-child(1) {
+      background-color: transparent;
+      font-size: 20px;
+      padding: 0px;
+      border: 1px solid;
+      font-weight: 600;
+    }
+
+    button:nth-child(2) {
       background-color: transparent;
       border: solid 1px;
       padding: 0px;

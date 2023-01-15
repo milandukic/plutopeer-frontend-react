@@ -133,9 +133,9 @@ const SoldTicket = ({ singleNftInfo, nftCardMargin }) => {
           >
             <p>{singleNftInfo.participants}</p>
           </Typography>
-          <Typography id="modal-modal-button" sx={{ mt: 1 }}>
-            <Button onClick={handleClose}>
-              <CloseIcon />
+          <Typography id="modal-modal-button" sx={{ mt: 1 }} >
+            <Button onClick={handleClose}  >
+              HASH SCAN
             </Button>
             <Button onClick={handleClose}>
               <CloseIcon />

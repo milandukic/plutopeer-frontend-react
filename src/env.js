@@ -5,19 +5,19 @@
 // export const GET_ACCOUNT_PREFIX = "/api/v1/accounts/";
 // export const IPFS_URL = "https://hashpack.b-cdn.net/ipfs/";
 
-
 // Mainnet
 export const TREASURY_ID_RAFFLE = "0.0.1358339";
-export const  TREASURY_ID_SWAP = "0.0.1427590";
+export const TREASURY_ID_SWAP = "0.0.1427590";
 export const NETWORK_TYPE = "mainnet";
 export const MIRROR_NET_URL = "https://mainnet-public.mirrornode.hedera.com";
 export const GET_ACCOUNT_PREFIX = "/api/v1/accounts/";
 export const IPFS_URL = "https://hashpack.b-cdn.net/ipfs/";
-export const ZUSE_COLLECTION_URL = "https://hedera-nft-backend.herokuapp.com/api/collectionSearch?search=";
+export const ZUSE_COLLECTION_URL =
+  "https://hedera-nft-backend.herokuapp.com/api/collectionSearch?search=";
 
 export const SERVER_URL = "https://dapp.deragods.com:3306/api";
- //export const SERVER_URL = "http://95.217.102.128/api";
-export const SOCKET_URL = 'wss://dapp.deragods.com:56112';
+//export const SERVER_URL = "http://95.217.102.128/api";
+export const SOCKET_URL = "wss://dapp.deragods.com:56112";
 
 // raffle
 export const CREATE_TICKET_PREFIX = "/tickets/add_tickets";
@@ -36,8 +36,9 @@ export const UPDATE_IF_RAFFLE_INFO_PREFIX = "/tickets/update_if_raffle_info";
 export const UPDATE_WINS_HISTORY_PREFIX = "/tickets/update_wins_history";
 export const GET_HBAR_INFO = "/tickets/get_habr_info";
 export const GET_ADMIN_INFO_PREFIX = "/tickets/get_admin_info";
-export const ADD_ONE_TO_ADMIN = "/tickets/add_one_to_admin";
-
+export const UPDATE_DATA_TO_ADMIN = "/tickets/update_data_to_admin";
+export const UPDATE_TICKET_INFO = "/tickets/update_ticket_info";
+export const UPDATE_SCHEDULE_INFO = "/tickets/update_schedule_info";
 // swap
 export const SWAP_ASSOCIATE_CHECK_PREFIX = "/swap/associate_check";
 export const LIST_NEW_NFTS_PREFIX = "/swap/list_new_nfts";
@@ -57,3 +58,13 @@ export const DELETE_COLLECTION_PREFIX = "/swap/delete_collection";
 //Modified by 3
 // export const CREATE_TICKET_PRICE = 10;
 export const CREATE_TICKET_PRICE = 0.01;
+export const MS_WEEK_TIME = 24 * 7;
+export const MINUTE_RAFFLE_DELAY = 30;
+
+export const scheduleData = {
+  isWeeklyFee: "You will pay $3/week in $HBAR after the first weeok expires",
+  isRenewFee: "The hosting fee will renew every seven days.",
+  isDrawWhenSellout: "The raffle will draw when all the ticket sell out.",
+  isDrawIfNotPay:
+    "The raffle will also draw if you don't renew the weekly host.",
+};
