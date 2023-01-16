@@ -39,7 +39,7 @@
   }
 
   .color-secondary {
-    color: #2cc149;
+    color: #23f06f; //#23f06f
   }
 
   .color-third {
@@ -51,7 +51,7 @@
   }
 
   .color-red {
-    color: #ff5c5c;
+    color: #fa4545; //#fa4545
   }
 
   .color-ticket {
@@ -72,7 +72,7 @@
   }
 
   .nft-name-verify {
-    border-bottom: 2px solid #7b64a8;
+    border-bottom: 2px solid gray;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -114,7 +114,7 @@
   .current-entry {
     margin-right: 10px;
     font-size: 14px;
-    // color: #2cc149;
+    // color: #23f06f;
   }
 
   .nft-image {
@@ -122,7 +122,7 @@
     min-width: 240px;
     min-height: 240px;
     padding: 0px;
-    margin: -12px;
+    margin: -10px;
     // background-color: #1b1b1b;
     position: absolute;
     aspect-ratio: 1;
@@ -211,7 +211,7 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
     background: #3e3e3e;
     margin: 0px -10px 0px -10px;
     padding: 5px 10px 5px 10px;
@@ -226,20 +226,21 @@
     }
 
     button {
-      //width: 80px;
+      width: 44px;
       padding: 0;
       margin: 0;
       height: 40px;
       border-radius: 10px;
-      background-color: transparent;
+      background-color: #1b1b1b;
       color: white;
       text-transform: uppercase;
-      font-size: 28px;
+      font-size: 15px;
       font-weight: 700;
-      border: 2px solid hwb(246deg 30% 26%);
+      border: 2px solid #5646fe;
 
       &.non-border{
         border: none;
+        background-color: transparent;
       }
     }
 

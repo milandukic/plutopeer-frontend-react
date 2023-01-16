@@ -33,6 +33,10 @@
         width: 80px;
         padding: 5px 5px 5px 10px;
       }
+
+      input{
+        background-color: white;
+      }
     }
 
     .dialog-control {
@@ -54,9 +58,9 @@
       }
 
       .btn-accept {
-        // background-color: #2cc149;
+        // background-color: #23f06f;
         background-color:transparent;
-        border: 1px solid #2cc149;
+        border: 1px solid #23f06f;
       }
 
       .btn-cancel {

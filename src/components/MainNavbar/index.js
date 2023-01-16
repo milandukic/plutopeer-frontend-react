@@ -117,7 +117,7 @@ function MainNavbar(props) {
           </ListItemButton>
         </ListItem>
         <ListItem disablePadding className="pl-32">
-          <ListItemButton href="/raffle" className="list-button">
+          <ListItemButton href="/raffle" className="list-button ">
             <ListItemText primary="raffles" />
           </ListItemButton>
         </ListItem>
@@ -153,7 +153,7 @@ function MainNavbar(props) {
               alert("Coming soon...");
             }}
           >
-            <img alt="..." src={require("assets/imgs/inventory-icon.png")} />
+            <img alt="..." src={require("assets/imgs/navigation/box.png")} />
           </Button>
         </div>
         <div className="nav-buttons">
@@ -177,7 +177,7 @@ function MainNavbar(props) {
                 <img alt="..." src={require("assets/imgs/portal-icon.png")} />
                 <p>portal</p>
               </Button>
-              <Button href="/raffle" className="main-nav-button">
+              <Button href="/raffle" className="main-nav-button pl-32">
                 <img alt="..." src={require("assets/imgs/navigation/raffle-icon.png")} style={{padding: "2px"}} />
                 <p>raffles</p>
               </Button>

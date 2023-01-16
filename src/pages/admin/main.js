@@ -2,16 +2,22 @@ import React, { useState, useEffect } from "react";
 import { Box, Button, IconButton, Modal, Input } from "@mui/material";
 import DoneIcon from "@mui/icons-material/Done";
 import { useHistory } from "react-router-dom";
-
+import Dialog from "@mui/material/Dialog";
 import HashPackConnectModal from "../../components/HashPackConnectModal.js";
+import { ToggleButton, ToggleButtonGroup } from "@mui/material";
 import { useHashConnect } from "../../assets/api/HashConnectAPIProvider.tsx";
-
 import * as global from "../../global";
 import * as env from "../../env";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+const TOGGLE_BUTTON_STYLE = {
+  "&.Mui-selected": {
+    //backgroundColor: "#23f06f"
+    borderColor: "#23f06f",
+  },
+};
 const INFO_TEXT_STYLE = {
   fontFamily: "Bebas Neue, Balsamiq Sans",
   fontSize: "18px",
@@ -25,6 +31,14 @@ const DEFAULT_LINE_STYLE = {
   alignItems: "center",
   justifyContent: "center",
   margin: "10px 0",
+};
+
+const TOKEN_BUTTON_STYLE = {
+  marginLeft: "20px",
+  "& img": {
+    width: "45px",
+    height: "45px",
+  },
 };
 
 const DEFAULT_INPUT_STYLE = {
@@ -64,13 +78,77 @@ const DEFAULT_BUTTON_STYLE = {
 
 function Main() {
   let history = useHistory();
-
+  const [tokenDialog, setTokenDialog] = useState(false);
+  const [tokenIconUrl, setTokenIconUrl] = useState("");
+  const [tokenInfos, setTokenInfos] = useState([]);
+  const [tokenSelId, setTokenSelId] = useState([]);
   const [walletConnectModalViewFlag, setWalletConnectModalViewFlag] =
     useState(false);
-
   const { walletData, installedExtensions, connect, disconnect } =
     useHashConnect();
-  const { accountIds } = walletData;
+  const { accountIds } = walletData; // get wallet data
+
+  useEffect(() => {
+    if (accountIds) {
+      getTokenInfo();
+      getAdminInfo();
+    }
+  }, [accountIds]);
+
+  const getAdminInfo = async () => {
+    const tokenInfos = await global.getInfoResponse(
+      env.SERVER_URL + env.GET_ADMIN_INFO_PREFIX + "?type=hts"
+    );
+
+    let temp = [];
+    if (tokenInfos?.data.result) {
+      tokenInfos?.data.data.map((item, index) => {
+        temp.push(item.tokenId);
+      });
+      console.log("getAdminInfo", temp);
+      setTokenSelId(temp);
+    }
+  };
+
+  const getTokenInfo = async () => {
+    const prices = await global.getInfoResponse(
+      "https://api-lb.hashpack.app/prices"
+    );
+    if (!prices?.data?.prices) return;
+
+    const tokenPrices = prices.data.prices;
+
+    const tokens = await global.getInfoResponse(
+      `https://mainnet-public.mirrornode.hedera.com/api/v1/tokens?account.id=${accountIds[0]}`
+    );
+
+    let updateTokens = [];
+    updateTokens.push({ token_id: "-1", symbol: "HBAR" });
+
+    console.log(tokens);
+    if (tokens?.data.tokens) {
+      tokens.data.tokens.map((item, index) => {
+        if (item.type == "FUNGIBLE_COMMON")
+          updateTokens.push({ token_id: item.token_id, symbol: item.symbol });
+      });
+    }
+
+    updateTokens.map((item, index) => {
+      const findPriceItem = global.getTokenPriceInfo(
+        item.token_id,
+        tokenPrices
+      );
+      if (findPriceItem != null) {
+        item["icon"] = findPriceItem.icon;
+        item["price"] = findPriceItem.price;
+        item["priceUsd"] = findPriceItem.priceUsd;
+      }
+    });
+
+    console.log("TicketCreate:updateTokens", updateTokens);
+    setTokenInfos(updateTokens);
+    updateTokens[0].icon && setTokenIconUrl(updateTokens[0].icon);
+  };
 
   const onClickWalletConnectModalClose = () => {
     setWalletConnectModalViewFlag(false);
@@ -104,16 +182,65 @@ function Main() {
 
   useEffect(() => {
     console.log("account id changed!");
-    if (!accountIds || accountIds[0] != "0.0.1466791") {
+    if (
+      !accountIds ||
+      !(accountIds[0] == "0.0.1099395" || accountIds[0] == "0.0.1466791")
+    ) {
       history.push("/admin");
     }
   }, [accountIds]);
 
   const [blackTokenId, setBlackTokenId] = useState("");
-  const [htsTokenId, setHTSTokenId] = useState("");
   const [hotTokenId, setHotTokenId] = useState("");
   const [raffleLink, setRaffleLink] = useState("");
   const [raffleDiscount, setRaffleDiscount] = useState("");
+
+  const handleChange = async (event) => {
+    console.log("TicketCreate:handleChange", event.target.value, tokenSelId);
+    if (!event.target.value) return;
+
+    let index = tokenSelId.findIndex((item) => item == event.target.value);
+
+    const htsTokenId = event.target.value;
+    // const htsInfo = await global.getInfoResponse(
+    //   `https://mainnet-public.mirrornode.hedera.com/api/v1/balances?account.id=${accountIds[0]}`
+    // );
+    // console.log(htsInfo);
+
+    // if (
+    //   !htsInfo?.data ||
+    //   htsInfo.data.balances.length <= 0 ||
+    //   !htsInfo.data.balances[0].tokens.find(
+    //     (item, index) => item.token_id == htsTokenId
+    //   )
+    // ) {
+    //   console.log(htsInfo.data.balances[0].tokens, htsTokenId);
+    //   toast.warning("This token doesn't exist in your wallet");
+    //   return;
+    // }
+
+    if (index == -1) {
+      const result = await global.postInfoResponse(
+        env.SERVER_URL + env.UPDATE_ADMIN_INFO,
+        { tokenId: htsTokenId, type: "hts" }
+      );
+      if (result?.data.result) {
+        toast.success("New hts token added to hts list");
+      } else toast.warning("Error, may be token alreday added to hts list");
+    } else {
+      const result = await global.postInfoResponse(
+        env.SERVER_URL + env.UPDATE_ADMIN_INFO,
+        { tokenId: htsTokenId, type: "hts", event: "delete" }
+      );
+
+      if (result?.data.result) {
+        toast.success("Existing hts token removed from hts list");
+      }
+    }
+
+    getAdminInfo();
+    //setTokenSelId(temp);
+  };
 
   const handleButtonClick = async (type) => {
     switch (type) {
@@ -133,46 +260,16 @@ function Main() {
         }
 
         const addBlackResult = await global.postInfoResponse(
-          env.SERVER_URL + env.UPDATE_DATA_TO_ADMIN,
-          { tokenId: blackTokenId }
+          env.SERVER_URL + env.UPDATE_ADMIN_INFO,
+          { tokenId: blackTokenId, type: "black" }
         );
 
         console.log(addBlackResult);
         if (addBlackResult.data.result)
-          toast.success("New token added to hts list");
-        else toast.warning("Error, may be token alreday added to hts list");
+          toast.success("New token added to black list");
+        else toast.warning("Error, may be token alreday added to black list");
         break;
       case "hts":
-        if (!htsTokenId) {
-          console.log(type, htsTokenId);
-          toast.warning("Input token id to add hts");
-          return;
-        }
-
-        const htsInfo = await global.getInfoResponse(
-          `https://mainnet-public.mirrornode.hedera.com/api/v1/balances?account.id=${accountIds[0]}`
-        );
-        console.log(htsInfo);
-
-        if (
-          !htsInfo?.data ||
-          htsInfo.data.balances.length <= 0 ||
-          !htsInfo.data.balances[0].tokens.find(
-            (item, index) => item.token_id == htsTokenId
-          )
-        ) {
-          toast.warning("This token doesn't exist in your wallet");
-          return;
-        }
-
-        const addHtsResult = await global.postInfoResponse(
-          env.SERVER_URL + env.UPDATE_DATA_TO_ADMIN,
-          { tokenId: htsTokenId, type: "hts" }
-        );
-
-        if (addHtsResult.data.result)
-          toast.success("New token added to hts list");
-        else toast.warning("Error, may be token alreday added to hts list");
         break;
       case "hot":
         if (!hotTokenId) {
@@ -190,7 +287,7 @@ function Main() {
         }
 
         const addHotResult = await global.postInfoResponse(
-          env.SERVER_URL + env.UPDATE_DATA_TO_ADMIN,
+          env.SERVER_URL + env.UPDATE_ADMIN_INFO,
           { tokenId: hotTokenId, type: "hot" }
         );
 
@@ -207,15 +304,14 @@ function Main() {
         }
 
         const addDiscountResult = await global.postInfoResponse(
-          env.SERVER_URL + env.UPDATE_DATA_TO_ADMIN,
+          env.SERVER_URL + env.UPDATE_ADMIN_INFO,
           { tokenId: raffleLink, type: "discount", value: raffleDiscount }
         );
 
         console.log(addDiscountResult);
         if (addDiscountResult.data.result)
           toast.success("New data added to discount list");
-        else
-        toast.success("New data updated to existing discount list");
+        else toast.success("New data updated to existing discount list");
         break;
     }
   };
@@ -226,7 +322,7 @@ function Main() {
         sx={{
           width: "100vw",
           height: "100vh",
-          backgroundColor: "black",
+          backgroundColor: "#121619",
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
@@ -266,16 +362,16 @@ function Main() {
           </Box>
           <Box sx={DEFAULT_LINE_STYLE}>
             <p style={DEFAULT_TEXT_STYLE}>ADD HTS TOKEN:</p>
-            <Input
-              placeholder="tokenid"
-              sx={DEFAULT_INPUT_STYLE}
-              value={htsTokenId}
-              onChange={(e) => setHTSTokenId(e.target.value)}
-            />
+            {/* <Box className="select-token-div" sx={TOKEN_BUTTON_STYLE}>
+              <img
+                src={tokenIconUrl}
+                onClick={() => setTokenDialog(true)}
+              ></img>
+            </Box> */}
             <Button
               variant="contained"
               sx={DEFAULT_BUTTON_STYLE}
-              onClick={() => handleButtonClick("hts")}
+              onClick={() => setTokenDialog(true)}
             >
               <DoneIcon />
             </Button>
@@ -370,6 +466,31 @@ function Main() {
           onClickDisconnectHashPack={onClickDisconnectHashPack}
         />
       </Modal>
+
+      <Dialog open={tokenDialog} onClose={() => setTokenDialog(false)}>
+        <div class="token-select-dialog">
+          <ToggleButtonGroup
+            orientation="vertical"
+            value={tokenSelId}
+            exclusive={false}
+          >
+            {tokenInfos.map((item, index) => {
+              if (item.token_id != -1)
+                return (
+                  <ToggleButton
+                    value={item.token_id}
+                    aria-label="list"
+                    sx={TOGGLE_BUTTON_STYLE}
+                    onClick={handleChange}
+                  >
+                    <img src={item.icon}></img>
+                    {item.symbol}
+                  </ToggleButton>
+                );
+            })}
+          </ToggleButtonGroup>
+        </div>
+      </Dialog>
       <ToastContainer autoClose={3000} draggableDirection="x" />
     </>
   );

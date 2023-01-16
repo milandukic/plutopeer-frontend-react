@@ -36,7 +36,7 @@ export const UPDATE_IF_RAFFLE_INFO_PREFIX = "/tickets/update_if_raffle_info";
 export const UPDATE_WINS_HISTORY_PREFIX = "/tickets/update_wins_history";
 export const GET_HBAR_INFO = "/tickets/get_habr_info";
 export const GET_ADMIN_INFO_PREFIX = "/tickets/get_admin_info";
-export const UPDATE_DATA_TO_ADMIN = "/tickets/update_data_to_admin";
+export const UPDATE_ADMIN_INFO = "/tickets/update_admin_info";
 export const UPDATE_TICKET_INFO = "/tickets/update_ticket_info";
 export const UPDATE_SCHEDULE_INFO = "/tickets/update_schedule_info";
 // swap
@@ -62,9 +62,9 @@ export const MS_WEEK_TIME = 24 * 7;
 export const MINUTE_RAFFLE_DELAY = 30;
 
 export const scheduleData = {
-  isWeeklyFee: "You will pay $3/week in $HBAR after the first weeok expires",
+  isWeeklyFee: "You will pay $3/week in $HBAR after the first week expires.",
   isRenewFee: "The hosting fee will renew every seven days.",
-  isDrawWhenSellout: "The raffle will draw when all the ticket sell out.",
+  isDrawWhenSellout: "The raffle will draw when all the tickets sell out.",
   isDrawIfNotPay:
     "The raffle will also draw if you don't renew the weekly host.",
 };

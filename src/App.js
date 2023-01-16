@@ -120,7 +120,7 @@ function App() {
             />
             <Route
               path="/nftswapbeta"
-              render={(props) => <Swap {...props} />}
+              render={(props) => (<><MainNavbar /><Swap {...props} /></>)}
             />
             <Redirect to="/raffle" />
             <Redirect from="/" to="/raffle" />

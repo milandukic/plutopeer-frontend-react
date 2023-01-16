@@ -1,6 +1,8 @@
 body {
-  font-family: Bebas Neue;
-  font-family: Balsamiq Sans;
+  .page-title {
+    font-family: Bebas Neue;
+  }
+  // font-family: Balsamiq Sans;
 
   .nft-circle-logo {
     background-image: url(../../assets/imgs/navigation/logo.png);
@@ -10,7 +12,7 @@ body {
     position: absolute;
     right: 10px;
     top: 10px;
-    background-color: black;
+    background-color: #121619;
     opacity: 0.9;
     border-radius: 100%;
 
@@ -31,7 +33,7 @@ body {
     position: absolute;
     right: 10px;
     top: 10px;
-    background-color: black;
+    background-color: #121619;
     opacity: 0.9;
     border-radius: 100%;
   }
@@ -43,7 +45,7 @@ body {
   align-items: center;
   justify-content: center;
   height: 75px;
-  background-color: black;
+  background-color: #121619;
   padding-left: 100px;
   .ml-50 {
     margin-left: 50px !important;
@@ -120,6 +122,11 @@ body {
     background-color: #2fe16f;
     margin: 0 5px;
     padding: 0;
+    cursor: url("../../assets/imgs/navigation/construction.png"), auto;
+    
+    &.pl-32{
+      cursor: pointer;
+    }
 
     img {
       height: 24px;
@@ -170,10 +177,11 @@ body {
 
 .main-nav-list-wrapper {
   height: 100vh;
-  background-color: #202124;
+  background-color: #121619;
 
   .pl-32 {
     padding-left: 32px !important;
+    cursor: pointer;
   }
 
   .list-button {

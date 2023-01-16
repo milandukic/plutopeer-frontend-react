@@ -26,20 +26,31 @@ const TicketCreate = ({
   const [tokenIconUrl, setTokenIconUrl] = useState("");
   const [tokenInfos, setTokenInfos] = useState([]);
   const [tokenDialog, setTokenDialog] = useState(false);
+  const [minDialog, setMinDialog] = useState(false);
+  const [checked, setChecked] = useState(false);
   const [tokenSelId, setTokenSelId] = useState("-1");
 
-  singleNftInfo.schedule = {
+  const initSchedule = {
     isWeeklyFee: false,
     isRenewFee: false,
     isDrawWhenSellout: false,
     isDrawIfNotPay: false,
   };
 
-  const [schedule, setSchedule] = useState(singleNftInfo.schedule);
+  const checkedSchedule = {
+    isWeeklyFee: false,
+    isRenewFee: true,
+    isDrawWhenSellout: false,
+    isDrawIfNotPay: false,
+  };
 
+  const [schedule, setSchedule] = useState(initSchedule);
+  const [adminInfo, setAdminInfo] = useState([]);
   useEffect(() => {
-    getTokenInfo();
-  }, []);
+    if (accountIds) {
+      getTokenInfo();
+    }
+  }, [accountIds]);
 
   const handleCheckedChange = (event, key) => {
     console.log(schedule, schedule[key]);
@@ -63,29 +74,41 @@ const TicketCreate = ({
       );
   };
 
-  const getTokenInfo = async () => {
-    const tokens = await global.getInfoResponse(
-      `https://mainnet-public.mirrornode.hedera.com/api/v1/tokens?account.id=${accountIds[0]}`
+  const getAdminInfo = async () => {
+    const tokenInfos = await global.getInfoResponse(
+      env.SERVER_URL + env.GET_ADMIN_INFO_PREFIX + "?type=hts"
     );
 
-    let updateTokens = [];
-    updateTokens.push({ token_id: "-1", symbol: "HBAR" });
-    if (tokens?.data.tokens) {
-      tokens.data.tokens.map((item, index) => {
-        if (item.type == "FUNGIBLE_COMMON")
-          updateTokens.push({ token_id: item.token_id, symbol: item.symbol });
+    let temp = [];
+    if (tokenInfos?.data.result) {
+      tokenInfos?.data.data.map((item, index) => {
+        temp.push(item.tokenId);
       });
+      console.log("getAdminInfo", temp);
+      return temp;
     }
+  };
+
+  const getTokenInfo = async () => {
+    let updateTokens = [];
+    let adminInfos = await getAdminInfo();
+    updateTokens.push({ token_id: "-1" });
+    adminInfos.map((item, index) => {
+      updateTokens.push({ token_id: item });
+    });
 
     updateTokens.map((item, index) => {
       const findPriceItem = global.getTokenPriceInfo(
         item.token_id,
         tokenPrices
       );
+
       if (findPriceItem != null) {
         item["icon"] = findPriceItem.icon;
         item["price"] = findPriceItem.price;
         item["priceUsd"] = findPriceItem.priceUsd;
+        if (item["token_id"] == -1) item["symbol"] = " HBAR";
+        else item["symbol"] = findPriceItem.symbol;
       }
     });
 
@@ -140,58 +163,97 @@ const TicketCreate = ({
           <p>{`Price: ${priceValue} ℏ`}</p>
           <p>{`Time: ${timeValue} hrs`}</p>
           <p>{`Tickets: ${ticketsValue} tickets`}</p>
-          <p className="status-label">Ticket Created!</p>
+          <p className="status-label">Raffle Created!</p>
         </div>
       )}
 
-      <div className="entry-buy-wrapper">
-        <Button
-          href={`https://zuse.market/collection/${singleNftInfo.tokenId}`}
-        >
-          <InfoIcon />
-        </Button>
-        <div className="selected-token">
+      <div className="entry-buy-wrapper ticket-create">
+        <div className="select-token-div">
           <p>TOKEN:</p>
-          <Checkbox onClick={() => setTokenDialog(true)} checked></Checkbox>
+          <img src={tokenIconUrl} onClick={() => setTokenDialog(true)}></img>
         </div>
-        <Button
-          onClick={() =>
-            onClickCreateTicket(
-              singleNftInfo.tokenId,
-              singleNftInfo.serialNum,
-              priceValue,
-              tokenSelId,
-              timeValue,
-              ticketsValue,
-              singleNftInfo.fallback,
-              singleNftInfo.creator,
-              singleNftInfo.name,
-              singleNftInfo.imgUrl,
-              singleNftInfo.floorPrice,
-              schedule
-            )
-          }
-        >
-          create
-        </Button>
+
+        <div className="minium-ticket-div">
+          <p>MINIUM TICKET SALES:</p>
+          <Checkbox
+            onClick={() => {
+              setChecked(!checked);
+              if (checked) {
+                setSchedule(initSchedule);
+              } else {
+                setSchedule(checkedSchedule);
+                setMinDialog(true);
+              }
+            }}
+            tokenDialog
+          ></Checkbox>
+        </div>
+        <div className="button-div">
+          <Button
+            href={`https://zuse.market/collection/${singleNftInfo.tokenId}`}
+          >
+            <InfoIcon />
+          </Button>
+
+          <Button
+            onClick={() =>
+              onClickCreateTicket(
+                singleNftInfo.tokenId,
+                singleNftInfo.serialNum,
+                priceValue,
+                tokenSelId,
+                timeValue,
+                ticketsValue,
+                singleNftInfo.fallback,
+                singleNftInfo.creator,
+                singleNftInfo.name,
+                singleNftInfo.imgUrl,
+                singleNftInfo.floorPrice,
+                schedule
+              )
+            }
+          >
+            create
+          </Button>
+        </div>
       </div>
       <Dialog open={tokenDialog} onClose={() => setTokenDialog(false)}>
+        <div class="token-select-dialog">
+          <ToggleButtonGroup
+            orientation="vertical"
+            value={tokenSelId}
+            exclusive
+            onChange={handleChange}
+          >
+            {tokenInfos.map((item, index) => {
+              return (
+                <ToggleButton value={item.token_id} aria-label="list">
+                  <img src={item.icon}></img>
+                  {item.symbol}
+                </ToggleButton>
+              );
+            })}
+          </ToggleButtonGroup>
+        </div>
+      </Dialog>
+      <Dialog open={minDialog} onClose={() => setMinDialog(false)}>
         <div class="raffle-schedule-dialog">
           <div className="dialog-title">
-            <p>WEEKLY TICKET</p>
+            <p>MINIUM TICKET SALE</p>
           </div>
-          {Object.keys(env.scheduleData).map((item, index) => {
-            return (
-              <div class="raffle-schedule-div">
-                <Checkbox
-                  inputProps={{ "aria-label": "Checkbox demo" }}
-                  checked = {schedule[item]}
-                  onChange={(e) => handleCheckedChange(e, item)}
-                />
-                <p>{env.scheduleData[item]} </p>
-              </div>
-            );
-          })}
+          <div class="raffle-schedule-div">
+            <p>
+              "Minimum Ticket Sales" is the lowest number of tickets that need
+              to be sold for the raffle drawing to take place. There's a fee
+              after the first free week of hosting.
+            </p>
+          </div>
+          <div class="raffle-schedule-div">
+            <p>If you choose this option:</p>
+            {Object.keys(env.scheduleData).map((item, index) => {
+              return <p>{env.scheduleData[item]} </p>;
+            })}
+          </div>
         </div>
       </Dialog>
     </div>

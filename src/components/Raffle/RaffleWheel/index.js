@@ -92,7 +92,6 @@ const RaffleWheel = ({ singleRaffle, onClose }) => {
         onClose={onClose}
         isStart={spintStart}
       ></WheelComponent>
-      {singleRaffle.winnerId}
       <div className="winnerFixedImage">
         {/* <video className="nft-image" alt="..." src={singleRaffle.imgUrl}></video> */}
         <img className="nft-image" alt="..." src={singleRaffle.imgUrl} />

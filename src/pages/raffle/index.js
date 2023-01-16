@@ -214,7 +214,7 @@ function Raffle() {
   useEffect(() => {
     if (accountIds?.length > 0) {
       getScheduleInfo();
-      autoAssociate(accountIds);
+      //autoAssociate(accountIds);
 
       ws = new WebSocket(env.SOCKET_URL);
       ws.onopen = () => {
@@ -306,37 +306,23 @@ function Raffle() {
     }
   };
 
-  const autoAssociate = async (accountIds) => {
+  const autoAssociate = async (tokenId) => {
     try {
-      const loadAdminInfo = await global.getAdminInfo("?type=hts");
-
-      console.log(loadAdminInfo.data.data);
-      loadAdminInfo &&
-        loadAdminInfo.length &&
-        loadAdminInfo.map(async (item, index) => {
-          console.log("loadAdminInfo", loadAdminInfo);
-
-          setAdminInfo(adminInfo, loadAdminInfo);
-          const tokenId = item.tokenId;
-          const associateState = await associateUpdateCheck(
-            accountIds[0],
-            tokenId
-          );
-          if (!associateState.result) {
-            console.log("Something wrong with Mirror Network.");
-            return;
-          }
-          if (associateState.associated) {
-            console.log("Already associated.");
-            return;
-          }
-          const associateResult = await associateToken(tokenId);
-          if (associateResult) {
-            console.log("Associate successful.");
-            return;
-          }
-          console.log("Associate failed.");
-        });
+      const associateState = await associateUpdateCheck(accountIds[0], tokenId);
+      if (!associateState.result) {
+        console.log("Something wrong with Mirror Network.");
+        return;
+      }
+      if (associateState.associated) {
+        console.log("Already associated.");
+        return;
+      }
+      const associateResult = await associateToken(tokenId);
+      if (associateResult) {
+        console.log("Associate successful.");
+        return;
+      }
+      console.log("Associate failed.");
     } catch (e) {
       console.log("Associate exception.", e);
     }
@@ -1495,21 +1481,22 @@ function Raffle() {
     }
 
     //Check token assoicate
-    const _associateTokenCheckResult = await global.postInfoResponse(
-      env.SERVER_URL + env.RAFFLE_ASSOCIATE_CHECK_PREFIX,
-      { tokenId: postData_.tokenSelId }
-    );
+    if (postData_.tokenSelId != -1) autoAssociate(postData_.tokenSelId);
+    // const _associateTokenCheckResult = await global.postInfoResponse(
+    //   env.SERVER_URL + env.RAFFLE_ASSOCIATE_CHECK_PREFIX,
+    //   { tokenId: postData_.tokenSelId }
+    // );
 
-    if (
-      !_associateTokenCheckResult ||
-      !_associateTokenCheckResult.data.result
-    ) {
-      toast.error(
-        "A problem occurred during the fungible token associate. Please try again."
-      );
-      setLoadingView(false);
-      return;
-    }
+    // if (
+    //   !_associateTokenCheckResult ||
+    //   !_associateTokenCheckResult.data.result
+    // ) {
+    //   toast.error(
+    //     "A problem occurred during the fungible token associate. Please try again."
+    //   );
+    //   setLoadingView(false);
+    //   return;
+    // }
 
     let _ticketPrice =
       parseFloat(env.CREATE_TICKET_PRICE) + parseFloat(postData_.fallback);
@@ -1615,8 +1602,8 @@ function Raffle() {
 
   const StyledBadge = styled(Badge)(({ theme }) => ({
     "& .MuiBadge-badge": {
-      right: "30px",
-      top: "-30px",
+      right: "25px",
+      top: "-28px",
       border: `2px solid ${theme.palette.background.paper}`,
       padding: "0 4px",
     },
@@ -1716,17 +1703,14 @@ function Raffle() {
               value="3"
             ></Tab>
             {winnerCount && (
-              <StyledBadge
-                color="secondary"
-                badgeContent={winnerCount}
-              ></StyledBadge>
+              <StyledBadge badgeContent={winnerCount}></StyledBadge>
             )}
-            <Tab
+            {/* <Tab
               className={dispTabValue == 4 ? "active" : ""}
               icon={<div class="RedirectIcon" />}
               aria-label="REDIRECT"
               value="4"
-            ></Tab>
+            ></Tab> */}
             <Tab
               className={dispTabValue == 5 ? "active" : ""}
               icon={<MenuIcon />}
@@ -1743,7 +1727,15 @@ function Raffle() {
         {/* <Main open={open}> */}
         <div ref={containerRef} className="raffle-wrapper">
           <div className="space-between">
-            <h1 className="page-title">
+            <h1
+              className="page-title"
+              style={{
+                margin:
+                  dispFromValue === FROM_WALLET
+                    ? `5px ${walletNftCardMargin}px`
+                    : `5px ${soldNftCardMargin}px`,
+              }}
+            >
               {dispFromValue === FROM_WALLET
                 ? "Create Raffle"
                 : dispFromValue === FROM_ACTIVE
@@ -1759,9 +1751,17 @@ function Raffle() {
             </h1>
           </div>
 
-          <div class={`search-sort-bar ${hidden}`}>
+          <div
+            class={`search-sort-bar ${hidden}`}
+            style={{
+              margin:
+                dispFromValue === FROM_WALLET
+                  ? `5px ${walletNftCardMargin}px`
+                  : `5px ${soldNftCardMargin}px`,
+            }}
+          >
             <div className="d-flex row m-0 vertical-navigation">
-              <Search>
+              {/* <Search>
                 <SearchIconWrapper>
                   <SearchIcon />
                 </SearchIconWrapper>
@@ -1770,8 +1770,10 @@ function Raffle() {
                   inputProps={{ "aria-label": "search" }}
                   onKeyUp={(e) => handleKeyChange(e)}
                 />
-              </Search>
-
+              </Search> */}
+              <div className="refresh-data-button" onClick={onClickRefreshData}>
+                <img src={require("assets/imgs/navigation/refresh.png")} />
+              </div>
               {dispFromValue === FROM_ACTIVE && (
                 <>
                   <div className="sort-wrapper">
@@ -1792,9 +1794,6 @@ function Raffle() {
                   </div>
                 </>
               )}
-              <div className="refresh-data-button" onClick={onClickRefreshData}>
-                <img src={require("assets/imgs/navigation/refresh.png")} />
-              </div>
               {/* <RefreshIcon
                 className="refresh-data-button"
                 onClick={() => onClickRefreshData()}

@@ -1520,9 +1520,9 @@ function Swap() {
             </div>
           )}
 
-          <div class={`search-sort-bar ${hidden}`}>
+          <div class={`search-sort-bar ${hidden}`} style={{ margin: `5px ${nftCardMargin}px` }}>
             <div className="vertical-navigation">
-              <Search>
+              {/* <Search>
                 <SearchIconWrapper>
                   <SearchIcon />
                 </SearchIconWrapper>
@@ -1531,7 +1531,7 @@ function Swap() {
                   inputProps={{ "aria-label": "search" }}
                   onKeyUp={(e) => handleKeyChange(e)}
                 />
-              </Search>
+              </Search> */}
               {accountIds?.length > 0 && dispFromValue === FROM_WALLET && (
                 <div className="list-button-wrapper">
                   <Button onClick={() => onClickListNfts()}>LIST</Button>

@@ -180,6 +180,8 @@ const SingleTicket = ({
             <p className="mr-1">Price/entry:</p>
             <p className="color-secondary">{`${singleNftInfo.price}`}</p>
             <img src={tokenPriceInfo && tokenPriceInfo.icon} />
+          </div>
+          <div className="nft-token-icon d-flex row m-0">
             <p className="color-secondary">{`(${totalTokenPrice}$)`}</p>
           </div>
           <div className="d-flex row m-0">
@@ -192,7 +194,7 @@ const SingleTicket = ({
           </div>
           <div className="nft-token-icon d-flex row m-0">
             <p className="mr-1">Floor Price:</p>
-            <p className="color-third">{`${singleNftInfo.floorPrice}`}</p>
+            <p className="color-secondary">{`${singleNftInfo.floorPrice}`}</p>
             <img src={hdbarPriceInfo && hdbarPriceInfo.icon} />
             <p className="color-secondary">{`(${totalHbarPrice}$)`}</p>
           </div>
@@ -228,11 +230,6 @@ const SingleTicket = ({
           <div className="entry-buy-wrapper">
             {ticketType == "buy" && (
               <>
-                <Button
-                  href={`https://zuse.market/collection/${singleNftInfo.tokenId}`}
-                >
-                  <InfoIcon />
-                </Button>
                 <CopyToClipboard text={copyLink}>
                   {/* <Button
                 className="non-border"
@@ -247,7 +244,12 @@ const SingleTicket = ({
                     <AssignmentReturnIcon />
                   </Button>
                 </CopyToClipboard>
-                <Button href="https://twitter.com/DeragodsNFT">
+                <Button
+                  href={`https://zuse.market/collection/${singleNftInfo.tokenId}`}   target="_blank"
+                >
+                  <InfoIcon />
+                </Button>
+                <Button href="https://twitter.com/DeragodsNFT" rel="noreferrer"  target="_blank">
                   <TwitterIcon />
                 </Button>
               </>

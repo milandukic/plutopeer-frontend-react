@@ -45,7 +45,7 @@ function Login() {
 
     useEffect(() => {
         console.log('account id changed!');
-        if (accountIds?.length > 0 && accountIds[0] == "0.0.1466791") {
+        if (accountIds?.length > 0 && (accountIds[0] == "0.0.1099395" || accountIds[0] =="0.0.1466791")) {
             console.log('Wallet connected!');
             history.push('/main');
         }
