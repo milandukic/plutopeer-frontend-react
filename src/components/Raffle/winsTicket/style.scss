@@ -228,6 +228,11 @@
       border: 2px solid #5646fe;
     }
 
+    .non-border {
+      background-color: transparent;
+      border-color: transparent;
+    }
+
     button:hover {
       background-color: grey;
       color: white;

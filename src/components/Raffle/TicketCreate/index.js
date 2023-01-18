@@ -45,7 +45,6 @@ const TicketCreate = ({
   };
 
   const [schedule, setSchedule] = useState(initSchedule);
-  const [adminInfo, setAdminInfo] = useState([]);
   useEffect(() => {
     if (accountIds) {
       getTokenInfo();
@@ -191,6 +190,7 @@ const TicketCreate = ({
         <div className="button-div">
           <Button
             href={`https://zuse.market/collection/${singleNftInfo.tokenId}`}
+            target="_blank"
           >
             <InfoIcon />
           </Button>

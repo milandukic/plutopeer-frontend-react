@@ -2,17 +2,16 @@ import React, { useEffect, useState } from "react";
 import WheelComponent from "./wheel";
 import Confetti from "react-confetti";
 import Dialog from "@mui/material/Dialog";
+import * as global from "../../../global";
+
 import "./style.scss";
 
 const RaffleWheel = ({ singleRaffle, onClose }) => {
   // console.log(">>>>>>>>>>>>>>>>>>>>RaffleWheel:", singleRaffle);
-  let resSec = singleRaffle.timeLimit ? parseInt(
-    (parseInt(singleRaffle.timeLimit * 3600 * 1000 + singleRaffle.createdTime) -
-      Date.now()) /
-      1000
-  ) : 0;
-  // let resSec = 100;
 
+  // let resSec = 100;
+  const [resSec, setResSec] = useState(0);
+  const [disCount, setDiscount] = useState(0);
   const [conRun, setConRun] = useState(false);
   const [spintStart, setSpinStart] = useState(false);
   const [timeLeft, setTimeLeft] = useState(resSec);
@@ -26,12 +25,29 @@ const RaffleWheel = ({ singleRaffle, onClose }) => {
   let timerHandle = 0;
 
   useEffect(() => {
-    if(singleRaffle && singleRaffle.participants)
-    initData();
-
+    if (resSec != 0) {
+      timerHandle = setInterval(onTimerTick, timerDelay);
+    }
+  }, [resSec]);
+  useEffect(() => {
+    if (singleRaffle && singleRaffle.participants) initData();
   }, [singleRaffle]);
 
-  const initData = () => {
+  const initData = async () => {
+    let curTime = await global.getTime();
+
+    let resSec = singleRaffle.timeLimit
+      ? parseInt(
+          (parseInt(
+            singleRaffle.timeLimit * 3600 * 1000 + singleRaffle.createdTime
+          ) -
+            curTime) /
+            1000
+        )
+      : 0;
+
+    setResSec(resSec);
+    setDiscount(resSec);
     const partArray = singleRaffle.participants;
     if (singleRaffle.winnerId) setSpinStart(true);
     const num = partArray ? partArray.length : 0;
@@ -64,19 +80,22 @@ const RaffleWheel = ({ singleRaffle, onClose }) => {
     onClose();
   };
 
+  let p = disCount;
+
+  console.log("refresh", p);
   const onTimerTick = () => {
-    if (resSec <= 0) {
-      // setSpinStart(true);
+    p = p - 1;
+    if (p <= 0) {
+      setSpinStart(true);
+      setDiscount(p);
       clearInterval(timerHandle);
     } else {
-      resSec = resSec - 1;
-      setTimeLeft(resSec);
+      console.log(p);
+      setDiscount(p);
     }
   };
 
-  useEffect(() => {
-    timerHandle = setInterval(onTimerTick, timerDelay);
-  }, []);
+  useEffect(() => {}, []);
 
   return (
     <>
@@ -87,7 +106,7 @@ const RaffleWheel = ({ singleRaffle, onClose }) => {
         onFinished={(winner) => onWheelFinished(winner)}
         primaryColor="gray"
         contrastColor="white"
-        buttonText="Win"
+        buttonText=""
         isOnlyOnce={false}
         onClose={onClose}
         isStart={spintStart}
@@ -95,7 +114,7 @@ const RaffleWheel = ({ singleRaffle, onClose }) => {
       <div className="winnerFixedImage">
         {/* <video className="nft-image" alt="..." src={singleRaffle.imgUrl}></video> */}
         <img className="nft-image" alt="..." src={singleRaffle.imgUrl} />
-        <h1>{!spintStart && `${timeLeft}s`}</h1>
+        <h1>{!spintStart && `${disCount}s`}</h1>
       </div>
 
       <Dialog open={conRun} onClose={onRoutteClose} fullScreen={false}>

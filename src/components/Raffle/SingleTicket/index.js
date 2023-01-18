@@ -11,8 +11,8 @@ import RaffleWheel from "../RaffleWheel";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { CopyToClipboard } from "react-copy-to-clipboard";
+import { useHashConnect } from "../../../assets/api/HashConnectAPIProvider.tsx";
 import "./style.scss";
-import Checkbox from "@mui/material/Checkbox";
 
 const SingleTicket = ({
   singleNftInfo,
@@ -21,6 +21,8 @@ const SingleTicket = ({
   addRaffleFlag,
   ticketType,
 }) => {
+  const { walletData } = useHashConnect(); // connect with hashpack wallet
+  const { accountIds } = walletData; // get wallet data
   const { param_raffle_id } = useParams();
   const [horizontal, setHorizontal] = useState("horizontal");
   const [open, setOpen] = useState(false);
@@ -117,7 +119,8 @@ const SingleTicket = ({
       setParticipantCount(singleRaffle.participants.length);
       setAccountInfo({ ...singleRaffle });
       //setWinnerId(wId);
-      setOpen(true);
+      if (wId == accountIds[0]) setOpen(true);
+
       console.log("SingleTicket: getRaffleInfo", raffleInfo.data.data);
     }
   };
@@ -133,10 +136,13 @@ const SingleTicket = ({
 
   //   singleNftInfo.timeLeft < 10000 ? 0 : singleNftInfo.timeLeft;
 
-  console.log(singleNftInfo);
+  console.log("singleNftInfo=", singleNftInfo);
   return (
     <>
-      <div className={`single-ticket-wrapper`}>
+      <div
+        className={`single-ticket-wrapper`}
+        style={{ margin: `5px ${nftCardMargin}px` }}
+      >
         <div className={`single-sub-wrapper ${horizontal}`}>
           <video
             className="nft-image"
@@ -147,34 +153,40 @@ const SingleTicket = ({
           {
             <div
               className={
-                singleNftInfo.nftHotInfo && singleNftInfo.nftHotInfo.length
+                singleNftInfo.nftHotTimeReamin > 0
                   ? "nft-circle-hot-logo"
                   : singleNftInfo.nftRaffleInfo &&
                     singleNftInfo.nftRaffleInfo.length
                   ? "nft-circle-logo"
                   : "nft-circle-logo"
               }
-            >
-              {singleNftInfo.nftRaffleInfo && singleNftInfo.nftRaffleInfo.length
-                ? -singleNftInfo.nftRaffleInfo[0].value
-                : ""}
-            </div>
+            ></div>
           }
-
-          {participantsCount > 0 &&
+          <span className="discount-label">
+            {singleNftInfo.nftRaffleInfo && singleNftInfo.nftRaffleInfo.length
+              ? "-" + singleNftInfo.nftRaffleInfo[0].value + "%"
+              : ""}
+          </span>
+          {/* {participantsCount > 0 &&
             singleNftInfo.timeLeft >= 10000 &&
-            singleNftInfo.timeLeft - 10000 <= env.MINUTE_RAFFLE_DELAY && (
-              <div className="ntf-live-roulette">
+            singleNftInfo.timeLeft - 10000 <= env.RAFFLE_DELAY_MINUTE && (
+              <div className="ntf-live-roulette" onClick={handleJoinLive}>
                 <div className="nft-live-image" />
-                <div className="nft-roulette-image" onClick={handleJoinLive} />
+                <div className="nft-roulette-image" />
               </div>
-            )}
+            )} */}
+          {singleNftInfo.ticketStatus == "roulette" && (
+            <div className="ntf-live-roulette" onClick={handleJoinLive}>
+              <div className="nft-live-image" />
+              <div className="nft-roulette-image" />
+            </div>
+          )}
           {singleNftInfo.verified && <VerifiedIcon className="verify-icon" />}
         </div>
 
         <div className={`single-sub-wrapper`}>
           <div className={`nft-name-verify ${horizontal}`}>
-            <p>{`${singleNftInfo.creator} | ${singleNftInfo.name} `}</p>
+            <p>{`${singleNftInfo.creator} | ${singleNftInfo.name} #${singleNftInfo.serialNum}`}</p>
           </div>
           <div className="nft-token-icon d-flex row m-0">
             <p className="mr-1">Price/entry:</p>
@@ -211,23 +223,13 @@ const SingleTicket = ({
               <p>{`Your entries: ${singleNftInfo.myEntry}`}</p>
             )}
           </div>
-          {/* <div class="raffle-schedule-dialog transparent">
-            {Object.keys(env.scheduleData).map((item, index) => {
-              if (!singleNftInfo.schedule) return <></>;
-
-              return (
-                <div class="raffle-schedule-div">
-                  <Checkbox
-                    inputProps={{ "aria-label": "Checkbox demo" }}
-                    // {...jsonSchedule[item]}
-                    disabled
-                  />
-                  <p>{env.scheduleData[item]}</p>
-                </div>
-              );
-            })}
-          </div> */}
-          <div className="entry-buy-wrapper">
+          <div
+            className={
+              ticketType == "schedule"
+                ? "entry-buy-wrapper buy"
+                : "entry-buy-wrapper"
+            }
+          >
             {ticketType == "buy" && (
               <>
                 <CopyToClipboard text={copyLink}>
@@ -237,24 +239,63 @@ const SingleTicket = ({
               > */}
                   <Button
                     className="non-border"
-                    onClick={() =>
-                      (window.location.href = singleNftInfo.raffleLink)
-                    }
+                    onClick={() => {
+                      window.open(singleNftInfo.raffleLink, "_blank");
+                    }}
                   >
                     <AssignmentReturnIcon />
                   </Button>
                 </CopyToClipboard>
                 <Button
-                  href={`https://zuse.market/collection/${singleNftInfo.tokenId}`}   target="_blank"
+                  href={`https://zuse.market/collection/${singleNftInfo.tokenId}`}
+                  target="_blank"
                 >
                   <InfoIcon />
                 </Button>
-                <Button href="https://twitter.com/DeragodsNFT" rel="noreferrer"  target="_blank">
+
+                <Button
+                  className="non-border"
+                  onClick={() => {
+                    let w = 500;
+                    let h = 500;
+                    // Fixes dual-screen position                             Most browsers      Firefox
+                    const dualScreenLeft =
+                      window.screenLeft !== undefined
+                        ? window.screenLeft
+                        : window.screenX;
+                    const dualScreenTop =
+                      window.screenTop !== undefined
+                        ? window.screenTop
+                        : window.screenY;
+
+                    const width = window.innerWidth
+                      ? window.innerWidth
+                      : document.documentElement.clientWidth
+                      ? document.documentElement.clientWidth
+                      : window.width;
+                    const height = window.innerHeight
+                      ? window.innerHeight
+                      : document.documentElement.clientHeight
+                      ? document.documentElement.clientHeight
+                      : window.height;
+
+                    const systemZoom = width / window.screen.availWidth;
+                    const left = (width - w) / 2 / systemZoom + dualScreenLeft;
+                    const top = (height - h) / 2 / systemZoom + dualScreenTop;
+
+                    window.open(
+                      `https://twitter.com/intent/tweet?url=Visit%20This%20Raffle%20on%20%F0%9F%94%97${singleNftInfo.raffleLink}`,
+                      "newwindow",
+                      ` location=no width=${w},height=${h},top=${top},left=${left},`
+                    );
+                  }}
+                >
                   <TwitterIcon />
                 </Button>
               </>
             )}
             {ticketType == "buy" ? (
+              singleNftInfo.ticketStatus != "roulette" && 
               <Button
                 onClick={() =>
                   onClickBuyEntry(

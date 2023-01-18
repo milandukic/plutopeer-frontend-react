@@ -97,7 +97,7 @@ function Swap() {
     receiveMultipleAndHbarNfts,
     receiveHbar,
     sendHbarToTreasury,
-    associateToken
+    associateToken,
   } = useHashConnect();
   const { accountIds } = walletData;
   const [loadingView, setLoadingView] = useState(false);
@@ -296,17 +296,17 @@ function Swap() {
         `https://mainnet-public.mirrornode.hedera.com/api/v1/accounts/${accountId}/tokens?token.id=${tokenId}`
       );
       console.log("autoAssociate log - 2 : ", associateInfo);
-  
+
       // already associated
       if (associateInfo.tokens?.length > 0)
         return { result: true, associated: true };
-  
+
       return { result: true, associated: false };
     } catch (error) {
       return { result: false, error: error.message };
     }
   };
-  
+
   const autoAssociate = async (accountIds, tokenId) => {
     const associateState = await associateUpdateCheck(accountIds[0], tokenId);
     if (!associateState.result) {
@@ -324,7 +324,6 @@ function Swap() {
     }
     console.log("Associate failed.");
   };
-
 
   //--------------------------------------------------------------------------------------------------
 
@@ -681,7 +680,7 @@ function Swap() {
             }
             _newDbCollectionInfo.push({
               swapLink:
-              "http://95.217.98.125:3000/swap/"  + _tempCollectionData[i]._id,
+                "http://95.217.98.125:3000/swap/" + _tempCollectionData[i]._id,
               accountId: _tempCollectionData[i].accountId,
               swapId: _tempCollectionData[i].swapId,
               nftCount: _tempCollectionData[i].nftCount,
@@ -1520,7 +1519,10 @@ function Swap() {
             </div>
           )}
 
-          <div class={`search-sort-bar ${hidden}`} style={{ margin: `5px ${nftCardMargin}px` }}>
+          <div
+            class={`search-sort-bar ${hidden}`}
+            style={{ margin: `5px ${nftCardMargin}px` }}
+          >
             <div className="vertical-navigation">
               {/* <Search>
                 <SearchIconWrapper>

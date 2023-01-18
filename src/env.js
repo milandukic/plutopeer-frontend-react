@@ -39,6 +39,7 @@ export const GET_ADMIN_INFO_PREFIX = "/tickets/get_admin_info";
 export const UPDATE_ADMIN_INFO = "/tickets/update_admin_info";
 export const UPDATE_TICKET_INFO = "/tickets/update_ticket_info";
 export const UPDATE_SCHEDULE_INFO = "/tickets/update_schedule_info";
+export const GET_TIME = "/tickets/get_time";
 // swap
 export const SWAP_ASSOCIATE_CHECK_PREFIX = "/swap/associate_check";
 export const LIST_NEW_NFTS_PREFIX = "/swap/list_new_nfts";
@@ -54,12 +55,12 @@ export const APPROVE_SWAP_OFFER_PREFIX = "/swap/approve_swap_offer";
 export const DELETE_SWAP_OFFER_PREFIX = "/swap/delete_swap_offer";
 export const CLAIM_REQUEST_PREFIX = "/swap/claim_request";
 export const DELETE_COLLECTION_PREFIX = "/swap/delete_collection";
-
 //Modified by 3
 // export const CREATE_TICKET_PRICE = 10;
 export const CREATE_TICKET_PRICE = 0.01;
-export const MS_WEEK_TIME = 24 * 7;
-export const MINUTE_RAFFLE_DELAY = 30;
+export const MS_WEEK_HOUR = 24 * 7;
+export const RAFFLE_DELAY_MINUTE = 30;
+export const HOT_DELAY_HOUR = 24;
 
 export const scheduleData = {
   isWeeklyFee: "You will pay $3/week in $HBAR after the first week expires.",

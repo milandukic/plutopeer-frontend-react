@@ -15,6 +15,7 @@ import InputBase from "@mui/material/InputBase";
 import Dialog from "@mui/material/Dialog";
 
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 
@@ -37,7 +38,7 @@ import { updateTicketFlag } from "../../store/socketslice";
 import { useParams } from "react-router-dom";
 
 const MAX_WRAPPER_WIDTH = 1245;
-const WALLET_NFT_CARD_WIDTH = 348;
+const WALLET_NFT_CARD_WIDTH = 240;
 const DB_NFT_CARD_WIDTH = 240;
 const SOLD_NFT_CARD_WIDTH = 240;
 const FROM_WALLET = "WALLET";
@@ -52,8 +53,9 @@ let ws = null;
 function Raffle() {
   const dispatch = useDispatch();
   const { param_raffle_id } = useParams();
-  const [open, setOpen] = React.useState(true);
-  const [hidden, setHidden] = React.useState("");
+  const [open, setOpen] = useState(true);
+  const [raffleOpen, setRaffleOpen] = useState(true);
+  const [hidden, setHidden] = useState("");
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [walletNftCardMargin, setWalletNftCardMargin] = useState(
     parseInt(
@@ -63,28 +65,6 @@ function Raffle() {
             2
         : ((window.innerWidth - 35) % WALLET_NFT_CARD_WIDTH) /
             parseInt((window.innerWidth - 35) / WALLET_NFT_CARD_WIDTH) /
-            2
-    )
-  );
-  const [dbNftCardMargin, setDbNftCardMargin] = useState(
-    parseInt(
-      window.innerWidth - 35 > MAX_WRAPPER_WIDTH
-        ? (MAX_WRAPPER_WIDTH % DB_NFT_CARD_WIDTH) /
-            parseInt(MAX_WRAPPER_WIDTH / DB_NFT_CARD_WIDTH) /
-            2
-        : ((window.innerWidth - 35) % DB_NFT_CARD_WIDTH) /
-            parseInt((window.innerWidth - 35) / DB_NFT_CARD_WIDTH) /
-            2
-    )
-  );
-  const [soldNftCardMargin, setSoldNftCardMargin] = useState(
-    parseInt(
-      window.innerWidth - 35 > MAX_WRAPPER_WIDTH
-        ? (MAX_WRAPPER_WIDTH % SOLD_NFT_CARD_WIDTH) /
-            parseInt(MAX_WRAPPER_WIDTH / SOLD_NFT_CARD_WIDTH) /
-            2
-        : ((window.innerWidth - 35) % SOLD_NFT_CARD_WIDTH) /
-            parseInt((window.innerWidth - 35) / SOLD_NFT_CARD_WIDTH) /
             2
     )
   );
@@ -165,13 +145,13 @@ function Raffle() {
   }, [loadingView]);
 
   useEffect(() => {
-    if (param_raffle_id) setHidden("hidden");
+    // if (param_raffle_id) setHidden("hidden");
     console.log("&&&&&&&&&&&&&&&&&&&&", param_raffle_id);
   }, [param_raffle_id]);
 
   useEffect(() => {
     function handleResize() {
-      const _tempWindowWidth = window.innerWidth;
+      const _tempWindowWidth = window.innerWidth ;
       setWindowWidth(_tempWindowWidth);
       setWalletNftCardMargin(
         parseInt(
@@ -184,30 +164,10 @@ function Raffle() {
                 2
         )
       );
-      setDbNftCardMargin(
-        parseInt(
-          _tempWindowWidth - 35 > MAX_WRAPPER_WIDTH
-            ? (MAX_WRAPPER_WIDTH % DB_NFT_CARD_WIDTH) /
-                parseInt(MAX_WRAPPER_WIDTH / DB_NFT_CARD_WIDTH) /
-                2
-            : ((_tempWindowWidth - 35) % DB_NFT_CARD_WIDTH) /
-                parseInt((_tempWindowWidth - 35) / DB_NFT_CARD_WIDTH) /
-                2
-        )
-      );
-      setSoldNftCardMargin(
-        parseInt(
-          _tempWindowWidth - 35 > MAX_WRAPPER_WIDTH
-            ? (MAX_WRAPPER_WIDTH % SOLD_NFT_CARD_WIDTH) /
-                parseInt(MAX_WRAPPER_WIDTH / SOLD_NFT_CARD_WIDTH) /
-                2
-            : ((_tempWindowWidth - 35) % SOLD_NFT_CARD_WIDTH) /
-                parseInt((_tempWindowWidth - 35) / SOLD_NFT_CARD_WIDTH) /
-                2
-        )
-      );
     }
     window.addEventListener("resize", handleResize);
+    console.log("**************", window.innerWidth);
+    if (window.innerWidth <= 500) setOpen(false);
     return () => window.removeEventListener("resize", handleResize);
   }, [windowWidth]);
 
@@ -330,6 +290,12 @@ function Raffle() {
 
   const onChangeDispValue = (newValue_) => {
     console.log(">>>>>>>>>>>>onChangeDispValue", newValue_);
+
+    if (param_raffle_id) {
+      window.location.href = "/";
+      return;
+    }
+
     if (newValue_ == 4) {
       // Direct
       window.location.href = "/";
@@ -368,10 +334,15 @@ function Raffle() {
 
   const handleDrawerOpen = () => {
     setOpen(true);
+    if(window.innerWidth < 500)
+    {
+      setRaffleOpen(false);
+    }
   };
 
   const handleDrawerClose = () => {
     setOpen(false);
+    setRaffleOpen(true);
   };
 
   const onClickRefreshData = () => {
@@ -564,9 +535,18 @@ function Raffle() {
           const _startDateList = _raffleHistory[i].startDate.split("T");
           const _endDataList = _raffleHistory[i].createdAt.split("T");
 
-          const nftHotInfo = await global.getAdminInfo(
+          let nftHotTimeReamin = 0;
+          let nftHotInfo = await global.getAdminInfo(
             `?tokenId=${_singleNftInfo.tokenId}&type=hot`
           );
+
+          if (nftHotInfo?.length) {
+            const createdTime = new Date(nftHotInfo[0].createdAt).getTime();
+
+            nftHotTimeReamin =
+              parseInt(env.HOT_DELAY_HOUR * 3600 * 1000 + createdTime) -
+              (await global.getTime());
+          }
 
           _newSoldNftInfo.push({
             tokenId: _singleNftInfo.tokenId,
@@ -583,7 +563,7 @@ function Raffle() {
             startDate: _startDateList[0],
             endDate: _endDataList[0],
             price: _raffleHistory[i].price,
-            nftHotInfo: nftHotInfo,
+            nftHotTimeReamin: nftHotTimeReamin,
           });
         }
       }
@@ -610,13 +590,13 @@ function Raffle() {
         `?accountId=${accountIds[0]}${_searchSuffix}`
     );
 
+    const curTime = await global.getTime();
     if (ticketInfo.data.result && ticketInfo.data.data.length) {
       const findInfo = ticketInfo.data.data.filter((item, index) => {
         item.schedule && (item.schedule = JSON.parse(item.schedule));
 
         let timeRemain =
-          parseInt(item.timeLimit * 3600 * 1000 + item.createdTime) -
-          Date.now();
+          parseInt(item.timeLimit * 3600 * 1000 + item.createdTime) - curTime;
 
         let timeLeft = parseInt(timeRemain / 3600 / 1000);
         if (timeLeft <= 0) {
@@ -625,14 +605,10 @@ function Raffle() {
 
         item.timeLeft = timeLeft;
         console.log("************", item);
-        if (
-          (item.timeLimit <= 68 && item.schedule.isWeeklyFee) ||
-          item.schedule.isRenewFee
-        )
-          return timeLeft < env.MS_WEEK_TIME / 2;
+        if (item.schedule.isRenewFee && item.ticketStatus == "success")
+          return timeLeft < env.MS_WEEK_HOUR / 2;
       });
 
-      console.log("getScheduleInfo***********", findInfo);
       setScheduleDialog(findInfo.length);
       setScheduleInfo(findInfo);
     }
@@ -649,6 +625,7 @@ function Raffle() {
   ) => {
     setLoadingView(true);
     let _newDbNftInfo = prevInfo_;
+
     let _searchSuffix = searchInfo_ ? `&searchInfo=${searchInfo_}` : "";
     if (!searchInfo_) setSearchValue("");
 
@@ -658,7 +635,9 @@ function Raffle() {
     const _getTicketsInfoResult = await global.getInfoResponse(
       env.SERVER_URL +
         env.GET_PENDING_RAFFLE_PREFIX +
-        `?limitCount=${MAX_NFT_PER_PAGE}&skipCount=${skipCount_}&sortMode=${sortMode_}&sortType=${sortType_}${_searchSuffix}`
+        `?limitCount=${MAX_NFT_PER_PAGE}&skipCount=${skipCount_}&sortMode=${
+          sortMode_ ? sortMode_ : "ascending"
+        }&sortType=${sortType_ ? sortType_ : "timeRemain"}${_searchSuffix}`
     );
     // const _getTicketsInfoResult = await global.getInfoResponse(env.SERVER_URL + env.GET_ALL_PREFIX);
     console.log("getDbNftData log - 2 : ", _getTicketsInfoResult);
@@ -706,7 +685,7 @@ function Raffle() {
             parseInt(
               _ticketsInfo[i].timeLimit * 3600 * 1000 +
                 _ticketsInfo[i].createdTime
-            ) - Date.now();
+            ) - (await global.getTime());
 
           let _timeLeft = parseInt(timeRemain / 3600 / 1000);
           if (_timeLeft <= 0) {
@@ -723,9 +702,19 @@ function Raffle() {
             const raffleLink =
               "http://95.217.98.125:3000/raffle/" + _singleNftInfo._id;
 
-            const nftHotInfo = await global.getAdminInfo(
+            let nftHotTimeReamin = 0;
+            let nftHotInfo = await global.getAdminInfo(
               `?tokenId=${_singleNftInfo.tokenId}&type=hot`
             );
+
+            if (nftHotInfo?.length) {
+              const createdTime = new Date(nftHotInfo[0].createdAt).getTime();
+
+              nftHotTimeReamin =
+                parseInt(env.HOT_DELAY_HOUR * 3600 * 1000 + createdTime) -
+                (await global.getTime());
+            }
+
             const nftRaffleInfo = await global.getAdminInfo(
               `?tokenId=${raffleLink}&type=discount`
             );
@@ -744,11 +733,12 @@ function Raffle() {
               totalCount: _ticketsInfo[i].totalCount,
               soldCount: _ticketsInfo[i].soldCount,
               timeLimit: _ticketsInfo[i].timeLimit,
+              ticketStatus: _ticketsInfo[i].ticketStatus,
               createdTime: _ticketsInfo[i].createdTime,
               timeLeft: _timeLeft,
               myEntry: _myEntryCount,
               verified: false,
-              nftHotInfo: nftHotInfo,
+              nftHotTimeReamin: nftHotTimeReamin,
               nftRaffleInfo: nftRaffleInfo,
             });
           }
@@ -809,7 +799,8 @@ function Raffle() {
           let _metadata = await global.getInfoResponse(_metadataUrl);
           // console.log("getWalletNftData log - 2 : ", _metadata);
 
-          if (_metadata) {
+          if (_metadata && _metadata.data.image) {
+            console.log("getWalletNftData log - 2 : ", _metadata);
             let _preImgUrl = _metadata.data.image.split("//");
             const _imgUrl = env.IPFS_URL + _preImgUrl[1];
             const _tokenId = _WNinfo.data.nfts[i].token_id;
@@ -850,9 +841,18 @@ function Raffle() {
               console.log("getNftInfo log - 1 : ", _floorPrice);
             }
 
-            const nftHotInfo = await global.getAdminInfo(
-              `?tokenId=${_tokenId.tokenId}&type=hot`
+            let nftHotTimeReamin = 0;
+            let nftHotInfo = await global.getAdminInfo(
+              `?tokenId=${_tokenId}&type=hot`
             );
+
+            if (nftHotInfo?.length) {
+              const createdTime = new Date(nftHotInfo[0].createdAt).getTime();
+
+              nftHotTimeReamin =
+                parseInt(env.HOT_DELAY_HOUR * 3600 * 1000 + createdTime) -
+                (await global.getTime());
+            }
 
             _newWalletNftInfo.push({
               tokenId: _tokenId,
@@ -864,7 +864,7 @@ function Raffle() {
               fallback: _fallback,
               ticketCreated: false,
               verified: false,
-              nftHotInfo: nftHotInfo,
+              nftHotTimeReamin: nftHotTimeReamin,
             });
           }
         }
@@ -1118,7 +1118,8 @@ function Raffle() {
       setLoadingView(true);
 
       try {
-        const amount = parseFloat(3 / priceUsd);
+        const amount = parseFloat(0.3 / priceUsd).toFixed(4);
+        
         // const amount = 1;
         console.log("onClickBuyEntry", amount, priceUsd);
 
@@ -1148,7 +1149,10 @@ function Raffle() {
 
         if (!result?.data.result) {
           toast.error("A problem occurred. Please try again.");
-        } else toast.success("Ticket extend successful!");
+        } else {
+          toast.success("Ticket extend successful!");
+          setScheduleDialog(false);
+        }
       } catch (e) {
         setLoadingView(false);
         console.log(e);
@@ -1218,7 +1222,7 @@ function Raffle() {
 
         setWinsNftInfo(_newWinsNftInfo);
         setRefreshFlag(!refreshFlag);
-        toast.success("NFT transmission successful!");
+        toast.success("You have successfully claimed your NFT win!");
       }
     }
     setLoadingView(false);
@@ -1250,18 +1254,16 @@ function Raffle() {
     );
 
     if (price_ <= 0) {
-      toast.warning("The ticket price must be greater than zero.");
+      toast.warning("Oops you missed the ticket price.");
       setLoadingView(false);
       return;
     }
 
-    // if (time_ < 24 || time_ > 168) {
-    //   toast.warning(
-    //     "The validity of the ticket must be between 24 and 168 hours."
-    //   );
-    //   setLoadingView(false);
-    //   return;
-    // }
+    if (time_ < 24 || time_ > 168) {
+      toast.warning("Oops you must input hours between 24 and 168.");
+      setLoadingView(false);
+      return;
+    }
 
     if (ticketsCount_ <= 0) {
       toast.warning("The number of tickets must be greater than zero.");
@@ -1443,7 +1445,7 @@ function Raffle() {
       ticketData_.serialNum,
       ticketCount_
     );
-    toast.success("Buy ticket successful.");
+    toast.success("You have successfully bought ticket(s).");
     setLoadingView(false);
   };
 
@@ -1526,7 +1528,7 @@ function Raffle() {
     }
 
     await changeWalletNftStatus(postData_.tokenId, postData_.serialNum);
-    toast.success("Create tickets successful.");
+    toast.success("Raffle successfully created.");
     setLoadingView(false);
   };
 
@@ -1665,6 +1667,16 @@ function Raffle() {
             <ChevronRightIcon />
           </IconButton>
         </div>
+
+        <div className="main-raffle-open">
+          <IconButton
+            onClick={handleDrawerClose}
+            sx={{ mr: 2, ...(raffleOpen && { display: "none" }) }}
+          >
+            <ChevronLeftIcon />
+          </IconButton>
+        </div>
+        
         <div className={!open ? "raffle-menu menu-closed" : "raffle-menu"}>
           <div
             className="main-nav-logo"
@@ -1705,12 +1717,6 @@ function Raffle() {
             {winnerCount && (
               <StyledBadge badgeContent={winnerCount}></StyledBadge>
             )}
-            {/* <Tab
-              className={dispTabValue == 4 ? "active" : ""}
-              icon={<div class="RedirectIcon" />}
-              aria-label="REDIRECT"
-              value="4"
-            ></Tab> */}
             <Tab
               className={dispTabValue == 5 ? "active" : ""}
               icon={<MenuIcon />}
@@ -1725,7 +1731,7 @@ function Raffle() {
         </div>
 
         {/* <Main open={open}> */}
-        <div ref={containerRef} className="raffle-wrapper">
+        <div ref={containerRef} className={!raffleOpen ?  "raffle-wrapper closed" : "raffle-wrapper"}>
           <div className="space-between">
             <h1
               className="page-title"
@@ -1733,7 +1739,7 @@ function Raffle() {
                 margin:
                   dispFromValue === FROM_WALLET
                     ? `5px ${walletNftCardMargin}px`
-                    : `5px ${soldNftCardMargin}px`,
+                    : `5px ${walletNftCardMargin}px`,
               }}
             >
               {dispFromValue === FROM_WALLET
@@ -1750,14 +1756,10 @@ function Raffle() {
                 : "PREVIOUS"}
             </h1>
           </div>
-
           <div
             class={`search-sort-bar ${hidden}`}
             style={{
-              margin:
-                dispFromValue === FROM_WALLET
-                  ? `5px ${walletNftCardMargin}px`
-                  : `5px ${soldNftCardMargin}px`,
+              margin: `5px ${walletNftCardMargin}px`,
             }}
           >
             <div className="d-flex row m-0 vertical-navigation">
@@ -1774,11 +1776,11 @@ function Raffle() {
               <div className="refresh-data-button" onClick={onClickRefreshData}>
                 <img src={require("assets/imgs/navigation/refresh.png")} />
               </div>
-              {dispFromValue === FROM_ACTIVE && (
+              {dispFromValue === FROM_ACTIVE && !param_raffle_id && (
                 <>
                   <div className="sort-wrapper">
                     <HighLights
-                      onChange={changeNftSortType}
+                      onChange={changeNftSortMode}
                       title={"SORT MODE"}
                       options={["ascending", "descending"]}
                       value={nftSortMode}
@@ -1807,7 +1809,7 @@ function Raffle() {
                 return (
                   <SingleTicket
                     singleNftInfo={item_}
-                    nftCardMargin={dbNftCardMargin}
+                    nftCardMargin={walletNftCardMargin}
                     onClickBuyEntry={onClickBuyEntry}
                     addRaffleFlag={addRaffleFlag}
                     ticketType="buy"
@@ -1831,7 +1833,7 @@ function Raffle() {
                 return (
                   <SoldTicket
                     singleNftInfo={item_}
-                    nftCardMargin={soldNftCardMargin}
+                    nftCardMargin={walletNftCardMargin}
                   />
                 );
               })}
@@ -1841,7 +1843,7 @@ function Raffle() {
                 return (
                   <WinsTicket
                     singleNftInfo={item_}
-                    nftCardMargin={soldNftCardMargin}
+                    nftCardMargin={walletNftCardMargin}
                     onClickSendRequest={onClickSendRequest}
                   />
                 );
@@ -1853,7 +1855,7 @@ function Raffle() {
                   className="single-nft-wrapper"
                   style={{ margin: `5px ${walletNftCardMargin}px` }}
                 >
-                  <div className="d-flex row m-0">
+                  <div className="d-flex row m-0 raffle-more-button">
                     <Button onClick={() => onClickLoadMoreNfts()}>
                       <AddIcon />
                     </Button>
@@ -1918,14 +1920,14 @@ function Raffle() {
       <Dialog open={scheduleDialog} onClose={() => closeScheduleDialog()}>
         <div className="nft-disp-panel schedule-panel">
           <div className="dialog-title">
-            <p>WEEKLY TICKET</p>
+            <p>WEEKLY PAY</p>
           </div>
           {scheduleInfo.length > 0 &&
             scheduleInfo.map((item, index_) => {
               return (
                 <SingleTicket
                   singleNftInfo={item}
-                  nftCardMargin={dbNftCardMargin}
+                  nftCardMargin={walletNftCardMargin}
                   onClickBuyEntry={onClickBuyEntry}
                   ticketType="schedule"
                 />

@@ -141,7 +141,9 @@ const ListedCollectionCard = ({
         </div>
         <div className="list-button-wrapper">
           <Button
-            href={`https://zuse.market/collection/${collectionInfo.tokenId}`}
+            href=
+            {`https://zuse.market/collection/${collectionInfo.tokenId}`}
+            target="_blank"
           >
             <InfoIcon />
           </Button>
@@ -153,6 +155,8 @@ const ListedCollectionCard = ({
               <AssignmentReturnIcon />
             </div>
           </CopyToClipboard>
+
+
           <Button href="https://twitter.com/DeragodsNFT">
             <TwitterIcon />
           </Button>

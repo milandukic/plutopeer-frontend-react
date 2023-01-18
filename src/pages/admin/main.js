@@ -293,13 +293,16 @@ function Main() {
 
         console.log(addHotResult);
         if (addHotResult.data.result)
-          toast.success("New token added to hot list");
-        else
-          toast.warning("Error, may be token alreday added to discount list");
+          toast.success("Token added or updated to hot list");
+        else toast.error("Error happened whille adding discount list");
         break;
       case "discount":
-        if (!raffleLink || !raffleDiscount) {
-          toast.warning("Input link or discount");
+        if (
+          !raffleLink ||
+          !raffleDiscount ||
+          parseInt(raffleDiscount < 0) || parseInt(raffleDiscount) > 100
+        ) {
+          toast.warning("Input link or correct discount value");
           return;
         }
 
@@ -311,7 +314,7 @@ function Main() {
         console.log(addDiscountResult);
         if (addDiscountResult.data.result)
           toast.success("New data added to discount list");
-        else toast.success("New data updated to existing discount list");
+        else toast.warning("Raffle already existed on discount list.s");
         break;
     }
   };

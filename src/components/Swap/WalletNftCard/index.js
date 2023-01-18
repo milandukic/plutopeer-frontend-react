@@ -25,6 +25,7 @@ const WalletNftCard = ({ singleNftInfo, nftCardMargin, selectWalletNft }) => {
         <div className="entry-buy-wrapper">
           <Button
             href={`https://zuse.market/collection/${singleNftInfo.tokenId}`}
+            target="_blank"
           >
             <InfoIcon />
           </Button>

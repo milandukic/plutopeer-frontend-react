@@ -5,7 +5,7 @@
 
 .pengu-dialog-container {
   width: fit-content;
-
+  overflow-y: auto;
   color: white;
   background: linear-gradient(181deg, #8c11e7 0%, #5440eb 100%);
   border-radius: 3%;

@@ -43,6 +43,13 @@ export const getTokenPriceInfo = (token_id, tokenPrices) => {
   return returnPriceItem;
 };
 
+export const getTime = async (param) => {
+  const timeInfo = await getInfoResponse(env.SERVER_URL + env.GET_TIME);
+
+  if (timeInfo) return timeInfo.data.data;
+  else return Date.now();
+};
+
 export const getAdminInfo = async (param) => {
   const loadAdminInfo = await getInfoResponse(
     env.SERVER_URL + env.GET_ADMIN_INFO_PREFIX + param
@@ -61,4 +68,3 @@ export const getRequest = async (url) => {
     return { result: false, error: error.message };
   }
 };
-

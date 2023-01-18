@@ -147,14 +147,20 @@ const WheelComponent = ({
     ctx.arc(centerX, centerY, size, lastAngle, angle, false);
     ctx.lineTo(centerX, centerY);
     ctx.closePath();
-    ctx.fillStyle = segColors[key];
+
+    //#a400ff
+
+
+   // ctx.fillStyle = segColors[key];
+   ctx.fillStyle = "#a400ff";
+
     ctx.fill();
     ctx.stroke();
     ctx.save();
-    ctx.translate(centerX, centerY);
+    ctx.translate(centerX , centerY);
     ctx.rotate((lastAngle + angle) / 2);
     ctx.fillStyle = contrastColor || "white";
-    ctx.font = "bold 1em proxima-nova";
+    ctx.font = "bold 2em proxima-nova";
     ctx.fillText(value.substr(0, 21), size / 2 + 20, 0);
     ctx.restore();
   };
@@ -164,7 +170,7 @@ const WheelComponent = ({
     let lastAngle = angleCurrent;
     const len = segments.length;
     const PI2 = Math.PI * 2;
-    ctx.lineWidth = 1;
+    ctx.lineWidth = 4;
     ctx.strokeStyle = primaryColor || "black";
     ctx.textBaseline = "middle";
     ctx.textAlign = "center";

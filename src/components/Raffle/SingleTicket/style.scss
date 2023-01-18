@@ -1,5 +1,4 @@
 .single-ticket-wrapper {
-  
   // background: #373737;
   // border: 2px solid #7b64a8;
   // border-radius: 10px;
@@ -26,7 +25,6 @@
       border: none;
       // margin: 5px 4px;
       margin-right: 0px;
-      
     }
 
     display: flex;
@@ -127,7 +125,28 @@
     position: absolute;
     aspect-ratio: 1;
   }
-  
+
+  .discount-label {
+    padding: 0px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    font-size: 30px;
+    height: 50px;
+    font-weight: 600;
+    color: white;
+    -webkit-text-stroke: 0.1px black;
+    text-shadow: 2px 2px #000, 1px 1px #000, 3px 3px #000;
+    text-decoration: none;
+    // text-shadow: #000 0px 0px 3px,   #000 0px 0px 3px,   #000 0px 0px 3px,
+    // #000 0px 0px 3px,   #000 0px 0px 3px,   #000 0px 0px 3px;
+
+    // border-radius: 10%;
+    // border: 2px solid black;
+  }
+
   .ntf-live-roulette {
     position: absolute;
     top: 190px;
@@ -136,7 +155,9 @@
     background-color: #373737;
     border-radius: 30px;
     opacity: 0.8;
-
+    &:hover {
+      background-color: rgb(116, 104, 104, 0.5);
+    }
     .nft-live-image {
       background-image: url(../../../assets/imgs/navigation/live.png);
       background-repeat: no-repeat;
@@ -162,10 +183,6 @@
       position: absolute;
       right: 15px;
       top: 0px;
-
-      &:hover {
-        background-color: rgb(116, 104, 104, 0.5);
-      }
     }
   }
 
@@ -216,6 +233,10 @@
     margin: 0px -10px 0px -10px;
     padding: 5px 10px 5px 10px;
 
+    &.buy {
+      justify-content: right;
+    }
+
     p {
       font-size: 12px;
     }
@@ -226,7 +247,10 @@
     }
 
     button {
-      width: 44px;
+      width: 80px;
+      &.non-border {
+        width: 45px;
+      }
       padding: 0;
       margin: 0;
       height: 40px;
@@ -238,7 +262,7 @@
       font-weight: 700;
       border: 2px solid #5646fe;
 
-      &.non-border{
+      &.non-border {
         border: none;
         background-color: transparent;
       }
@@ -248,7 +272,7 @@
       background-color: grey;
       color: white;
 
-      &.non-border{
+      &.non-border {
         background-color: transparent;
       }
     }

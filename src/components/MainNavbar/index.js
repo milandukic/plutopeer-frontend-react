@@ -116,8 +116,12 @@ function MainNavbar(props) {
             <ListItemText primary="portal" />
           </ListItemButton>
         </ListItem>
-        <ListItem disablePadding className="pl-32">
+        <ListItem disablePadding>
           <ListItemButton href="/raffle" className="list-button ">
+            <img
+              alt="..."
+              src={require("assets/imgs/navigation/raffle-icon.png")}
+            />
             <ListItemText primary="raffles" />
           </ListItemButton>
         </ListItem>
@@ -178,7 +182,11 @@ function MainNavbar(props) {
                 <p>portal</p>
               </Button>
               <Button href="/raffle" className="main-nav-button pl-32">
-                <img alt="..." src={require("assets/imgs/navigation/raffle-icon.png")} style={{padding: "2px"}} />
+                <img
+                  alt="..."
+                  src={require("assets/imgs/navigation/raffle-icon.png")}
+                  style={{ padding: "2px" }}
+                />
                 <p>raffles</p>
               </Button>
               <Button

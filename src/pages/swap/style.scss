@@ -77,6 +77,12 @@
     flex-direction: row;
     align-items: center;
 
+    .sort-group{
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+    }
+    
     .list-button-wrapper {
       width: auto;
       padding-bottom: 0px;

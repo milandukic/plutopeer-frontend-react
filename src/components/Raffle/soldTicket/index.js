@@ -10,7 +10,7 @@ import TwitterIcon from "@mui/icons-material/Twitter";
 import { useSelector } from "react-redux";
 import "./style.scss";
 import * as global from "../../../global";
-
+import * as env from "../../../env";
 const style = {
   position: "absolute",
   top: "50%",
@@ -108,12 +108,13 @@ const SoldTicket = ({ singleNftInfo, nftCardMargin }) => {
           />
           <Button
             href={`https://zuse.market/collection/${singleNftInfo.tokenId}`}
+            target="_blank"
           >
             <InfoIcon />
           </Button>
-          <Button href="https://twitter.com/DeragodsNFT">
+          {/* <Button href="https://twitter.com/DeragodsNFT">
             <TwitterIcon />
-          </Button>
+          </Button> */}
         </div>
       </div>
       <Modal
@@ -131,11 +132,26 @@ const SoldTicket = ({ singleNftInfo, nftCardMargin }) => {
             sx={{ mt: 2 }}
             style={{ wordWrap: "break-word" }}
           >
-            <p>{singleNftInfo.participants}</p>
+            <p>
+              {singleNftInfo.participants == "No buyer!"
+                ? "No buyer 😦 invite your friends next time!"
+                : singleNftInfo.participants}
+            </p>
           </Typography>
-          <Typography id="modal-modal-button" sx={{ mt: 1 }} >
-            <Button onClick={handleClose}  >
-              HASH SCAN
+          <Typography id="modal-modal-button" sx={{ mt: 1 }}>
+            <Button
+              onClick={() => {
+                window.open(
+                  `https://hashscan.io/mainnet/account/${env.TREASURY_ID_RAFFLE}`,
+                  "_blank"
+                );
+              }}
+            >
+              {/* HASH SCAN */}
+              <img
+                src={require("assets/imgs/navigation/hashscanliogo.png")}
+                style={{ height: "30px", width: "80px" }}
+              ></img>
             </Button>
             <Button onClick={handleClose}>
               <CloseIcon />

@@ -1,64 +1,67 @@
 body {
+  background-color: #121619;
+
   .page-title {
     font-family: Bebas Neue;
   }
   // font-family: Balsamiq Sans;
+}
 
-  .nft-circle-logo {
-    background-image: url(../../assets/imgs/navigation/logo.png);
-    background-size: cover;
-    width: 50px;
-    height: 50px;
-    position: absolute;
-    right: 10px;
-    top: 10px;
-    background-color: #121619;
-    opacity: 0.9;
-    border-radius: 100%;
-
-    color: red;
-    font-size: 50px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-weight: 700;
+@media screen and (max-width: 500px) {
+  .nav-links,
+  .info-wrapper {
+    display: none !important;
   }
+}
 
-  .nft-circle-hot-logo {
-    background-image: url(../../assets/imgs/navigation/hot.png);
-    background-size: cover;
-    width: 50px;
-    height: 50px;
-    position: absolute;
-    right: 10px;
-    top: 10px;
-    background-color: #121619;
-    opacity: 0.9;
-    border-radius: 100%;
-  }
+.nft-circle-logo {
+  background-image: url(../../assets/imgs/navigation/logo.png);
+  background-size: cover;
+  width: 50px;
+  height: 50px;
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  background-color: #121619;
+  opacity: 0.9;
+  border-radius: 100%;
+
+  color: red;
+  font-size: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+}
+
+.nft-circle-hot-logo {
+  background-image: url(../../assets/imgs/navigation/hot.png);
+  background-size: cover;
+  width: 50px;
+  height: 50px;
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  background-color: #121619;
+  opacity: 0.9;
+  border-radius: 100%;
 }
 
 .main-nav-container {
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: center;
-  height: 75px;
+  justify-content: right;
+  height: 10vh;
   background-color: #121619;
-  padding-left: 100px;
+  // padding-left: 100px;
   .ml-50 {
     margin-left: 50px !important;
   }
 
   .btn:hover {
     background-color: gray;
-  }
-
-  @media screen and (max-width: 500px) {
-    .nav-links {
-      visibility: hidden;
-    }
   }
 
   @media screen and (min-width: 1279px) {
@@ -68,11 +71,12 @@ body {
   }
 
   .main-nav-wrapper {
-    width: 1280px;
+    // width: 1280px;
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: end;
+    flex-wrap: wrap;
     padding: 0 10px;
 
     .nav-links {
@@ -123,8 +127,8 @@ body {
     margin: 0 5px;
     padding: 0;
     cursor: url("../../assets/imgs/navigation/construction.png"), auto;
-    
-    &.pl-32{
+
+    &.pl-32 {
       cursor: pointer;
     }
 

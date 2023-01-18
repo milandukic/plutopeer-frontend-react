@@ -303,7 +303,7 @@ export default function HashConnectProvider({
   };
 
   const sendHbarToTreasury = async (amount_) => {
-    // console.log("************************ sendHbarAndNftToTreasury 0 : ");
+
 
     const _accountId = saveData.accountIds[0];
     const _provider = hashConnect.getProvider(
@@ -313,6 +313,8 @@ export default function HashConnectProvider({
     );
     const _signer = hashConnect.getSigner(_provider);
     const _treasuryId = AccountId.fromString(env.TREASURY_ID_RAFFLE);
+
+    console.log("************************ sendHbarAndNftToTreasury 0 : ", amount_);
 
     const allowanceTx =
       new AccountAllowanceApproveTransaction().approveHbarAllowance(

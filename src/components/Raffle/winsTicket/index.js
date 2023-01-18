@@ -10,6 +10,9 @@ import TwitterIcon from "@mui/icons-material/Twitter";
 import { useSelector } from "react-redux";
 import "./style.scss";
 import * as global from "../../../global";
+import * as env from "../../../env";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const style = {
   position: "absolute",
@@ -105,12 +108,49 @@ const WinsTicket = ({ singleNftInfo, nftCardMargin, onClickSendRequest }) => {
           />
           <Button
             href={`https://zuse.market/collection/${singleNftInfo.tokenId}`}
+            target="_blank"
           >
             <InfoIcon />
           </Button>
-          <Button href="https://twitter.com/DeragodsNFT">
+          <a
+            className="non-border btn btn-secondary"
+            onClick={() => {
+              let w = 500;
+              let h = 500;
+              // Fixes dual-screen position                             Most browsers      Firefox
+              const dualScreenLeft =
+                window.screenLeft !== undefined
+                  ? window.screenLeft
+                  : window.screenX;
+              const dualScreenTop =
+                window.screenTop !== undefined
+                  ? window.screenTop
+                  : window.screenY;
+
+              const width = window.innerWidth
+                ? window.innerWidth
+                : document.documentElement.clientWidth
+                ? document.documentElement.clientWidth
+                : window.width;
+              const height = window.innerHeight
+                ? window.innerHeight
+                : document.documentElement.clientHeight
+                ? document.documentElement.clientHeight
+                : window.height;
+
+              const systemZoom = width / window.screen.availWidth;
+              const left = (width - w) / 2 / systemZoom + dualScreenLeft;
+              const top = (height - h) / 2 / systemZoom + dualScreenTop;
+
+              window.open(
+                `https://twitter.com/intent/tweet?url=Visit%20This%20Raffle%20on%20%F0%9F%94%97${singleNftInfo.raffleLink}`,
+                "newwindow",
+                ` location=no width=${w},height=${h},top=${top},left=${left},`
+              );
+            }}
+          >
             <TwitterIcon />
-          </Button>
+          </a>
           {singleNftInfo.nftSendProcess == "pending" && (
             <Button
               onClick={() =>
@@ -140,10 +180,31 @@ const WinsTicket = ({ singleNftInfo, nftCardMargin, onClickSendRequest }) => {
             sx={{ mt: 2 }}
             style={{ wordWrap: "break-word" }}
           >
-            <p>{singleNftInfo.participants}</p>
+            <p>
+              {singleNftInfo.participants == "No buyer!"
+                ? "No buyer 😦 invite your friends next time!"
+                : singleNftInfo.participants}
+            </p>
           </Typography>
-          <Typography id="modal-modal-button" sx={{ mt: 1 }} className="flex flex-row justify-center">            <Button onClick={handleClose}>
-              <p>HASH SCAN</p>
+          <Typography
+            id="modal-modal-button"
+            sx={{ mt: 1 }}
+            className="flex flex-row justify-center"
+          >
+            {" "}
+            <Button
+              onClick={() => {
+                window.open(
+                  `https://hashscan.io/mainnet/account/${env.TREASURY_ID_RAFFLE}`,
+                  "_blank"
+                );
+              }}
+            >
+              {/* HASH SCAN */}
+              <img
+                src={require("assets/imgs/navigation/hashscanliogo.png")}
+                style={{ height: "30px", width: "80px" }}
+              ></img>
             </Button>
             <Button onClick={handleClose}>
               <CloseIcon />
@@ -151,6 +212,7 @@ const WinsTicket = ({ singleNftInfo, nftCardMargin, onClickSendRequest }) => {
           </Typography>
         </Box>
       </Modal>
+      <ToastContainer autoClose={3000} draggableDirection="x" />
     </div>
   );
 };
