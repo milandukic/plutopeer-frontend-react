@@ -22,6 +22,7 @@
 
   .nft-name-verify {
     margin-top: 240px;
+    text-transform: uppercase;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -113,6 +114,11 @@
       background-size: contain;
       padding: 6px 6px 6px 25px;
       margin-bottom: 5px;
+
+      &.disabled{
+        border: 2px solid gray;
+        color: #24c149;
+      }
     }
 
     /* Chrome, Safari, Edge, Opera */

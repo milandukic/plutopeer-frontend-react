@@ -29,6 +29,7 @@ import WinsTicket from "components/Raffle/winsTicket";
 import PenguDialog from "components/PenguDialog";
 import BuyTicketDialog from "components/Raffle/BuyTicketDialog";
 import HighLights from "components/HighLights";
+import CloseIcon from "@mui/icons-material/Close";
 import { useHashConnect } from "../../assets/api/HashConnectAPIProvider.tsx";
 import * as global from "../../global";
 import * as env from "../../env";
@@ -126,6 +127,8 @@ function Raffle() {
   const [addRaffleFlag, setAddRaffleFlag] = useState(false);
   const [adminInfo, setAdminInfo] = useState([]);
 
+  const [newRaffleDialogOpen, setNewRaffleDialogOpen] = useState(false);
+
   const init = () => {
     setPenguDialogViewFlag(false);
     setCurrentCreateTicketPostData({});
@@ -145,13 +148,15 @@ function Raffle() {
   }, [loadingView]);
 
   useEffect(() => {
-    // if (param_raffle_id) setHidden("hidden");
+    if (!param_raffle_id){
+      setNewRaffleDialogOpen(true);
+    }
     console.log("&&&&&&&&&&&&&&&&&&&&", param_raffle_id);
   }, [param_raffle_id]);
 
   useEffect(() => {
     function handleResize() {
-      const _tempWindowWidth = window.innerWidth ;
+      const _tempWindowWidth = window.innerWidth;
       setWindowWidth(_tempWindowWidth);
       setWalletNftCardMargin(
         parseInt(
@@ -332,10 +337,17 @@ function Raffle() {
     setScheduleDialog(false);
   };
 
+  const closeNewRaffleDialog = async() => {
+    setNewRaffleDialogOpen(false);
+    // await global.postInfoResponse(env.SERVER_URL + env.UPDATE_ADMIN_INFO, {
+    //   tokenId: accountIds[0],
+    //   type: "firstView",
+    // });
+  };
+
   const handleDrawerOpen = () => {
     setOpen(true);
-    if(window.innerWidth < 500)
-    {
+    if (window.innerWidth < 500) {
       setRaffleOpen(false);
     }
   };
@@ -396,7 +408,11 @@ function Raffle() {
   const handleContainerOnBottom = useCallback(() => {
     console.log("handleContainerOnBottom log - 1 : " + dispFromValue);
     if (dispFromValue === FROM_PREVIOUS) {
-      // console.log('handleContainerOnBottom log - 2 : ', soldNftInfo.length, soldNftInfo);
+      console.log(
+        "handleContainerOnBottom log - 2 : ",
+        soldNftInfo.length,
+        soldNftInfo
+      );
       getRaffleHistory(soldNftInfo.length, soldNftInfo);
     } else if (dispFromValue === FROM_ACTIVE) {
       // console.log('handleContainerOnBottom log - 3 : ', dbNftInfo.length, dbNftInfo);
@@ -579,6 +595,11 @@ function Raffle() {
     if (!accountIds) return;
     setLoadingView(true);
 
+    //Check FirstView Of Raffle
+    const firstViewAdminInfo = await global.getAdminInfo(
+      `?tokenId=${accountIds[0]}&type=firstView`
+    );
+
     let _searchSuffix = "";
 
     if (param_raffle_id)
@@ -606,7 +627,7 @@ function Raffle() {
         item.timeLeft = timeLeft;
         console.log("************", item);
         if (item.schedule.isRenewFee && item.ticketStatus == "success")
-          return timeLeft < env.MS_WEEK_HOUR / 2;
+          return timeLeft < env.MS_POPUP_EXTEND;
       });
 
       setScheduleDialog(findInfo.length);
@@ -700,7 +721,7 @@ function Raffle() {
 
           if (!_findResult) {
             const raffleLink =
-              "http://95.217.98.125:3000/raffle/" + _singleNftInfo._id;
+              "https://app.deragods.com/raffle/" + _singleNftInfo._id;
 
             let nftHotTimeReamin = 0;
             let nftHotInfo = await global.getAdminInfo(
@@ -1110,7 +1131,7 @@ function Raffle() {
         setCurrentBuyTicketData(_tempTicketInfo[0]);
       displayPenguDialog(
         "Terms & Conditions",
-        "1. Confirm the collection by clicking the i button on the right corner of the raffle display.<br />2. If the collection is listed on marketplaces, it is a verified collection. If otherwise, do due diligence before proceeding to purchase tickets.<br />3. Raffles shall not assume any liability or responsibility for any collection.<br />4. Raffles cannot refund ticket(s) when bought.<br />5. You can only buy 20% of the total tickets.",
+        `1. Click <img src="/copylink.png" style="width:25px;margin-top:-9px"/> to get full details of the collection.<br/>2. Click  <img src="/i.png" style="width:25px;margin-top:-7px"/>  to check the collection on the marketplace.<br/>2. Conduct research before buying Tickets.<br/>3. Raffles shall not assume any liability or responsibility for any collection.<br/>4. Raffles cannot refund ticket(s) when bought.<br/>5. Each wallet can only buy 20% of the Total tickets.`,
         "AGREE",
         "buy-ticket"
       );
@@ -1118,8 +1139,8 @@ function Raffle() {
       setLoadingView(true);
 
       try {
-        const amount = parseFloat(0.3 / priceUsd).toFixed(4);
-        
+        const amount = parseFloat(env.MS_MONTH_USD / priceUsd).toFixed(4);
+
         // const amount = 1;
         console.log("onClickBuyEntry", amount, priceUsd);
 
@@ -1240,7 +1261,9 @@ function Raffle() {
     name_,
     imgUrl_,
     floorPrice_,
-    schedule
+    schedule,
+    checked,
+    priceUsd
   ) => {
     setLoadingView(true);
     console.log(
@@ -1259,7 +1282,9 @@ function Raffle() {
       return;
     }
 
-    if (time_ < 24 || time_ > 168) {
+    // if (!checked && time_ > 168) {
+
+    if (!checked && (time_ < 24 || time_ > 168)) {
       toast.warning("Oops you must input hours between 24 and 168.");
       setLoadingView(false);
       return;
@@ -1286,13 +1311,15 @@ function Raffle() {
       imgUrl: imgUrl_,
       floorPrice: floorPrice_,
       schedule: schedule,
+      checked: checked,
+      priceUsd: priceUsd,
     };
 
     setCurrentCreateTicketPostData(_postData);
 
     displayPenguDialog(
       "Terms & Conditions",
-      "1. The NFT prize will be transferred from your wallet into our escrow for all created raffles.<br/>2. A base fee charge of 10ℏ to host a raffle. If only one ticket is sold, the Raffle will roll. If no ticket is sold, your NFT will be refunded, but raffles will send the base fee to our treasury.<br/>3. If all tickets are sold out, the Raffle rolls immediately, disregarding the time left.<br/>4. Raffles will always proceed no matter the ticket sales.<br/>5. The minimum time for raffles is 24Hrs, and the maximum is 168Hrs.<br/>6. There is a 4% commission fee for all ticket sales.<br/>7. After ticket sales, raffles will not be able to be edited or canceled.<br/>8. We do not take responsibility for the promotion of raffles.",
+      "1. The NFT prize will be transferred from your wallet into our escrow for all created Raffles.<br/>2. A base fee of 10H to host a raffle.<br/>3. Raffle will roll if one ticket or more sells and the time expires.<br/>4. Raffle will return NFT if no ticket sells, but the base fee will not refund.<br/>5. The minimum time for raffles is 24h(1 day) and the maximum time is 168hr(1 week).<br/>6. There is a 4% commission fee for all ticket sales.</br>7. After hosting, Raffles cannot be altered or cancelled.</br>8. We do not take responsibility for the promotion of Raffles.",
       "AGREE",
       "create-tickets"
     );
@@ -1344,7 +1371,7 @@ function Raffle() {
     }
 
     if (ticketCount_ <= 0) {
-      toast.warning("Set the correct number of tickets you want to buy.");
+      toast.warning("Set the correct number of tickets You want to buy.");
       setLoadingView(false);
       return;
     }
@@ -1482,27 +1509,25 @@ function Raffle() {
       return;
     }
 
-    //Check token assoicate
     if (postData_.tokenSelId != -1) autoAssociate(postData_.tokenSelId);
-    // const _associateTokenCheckResult = await global.postInfoResponse(
-    //   env.SERVER_URL + env.RAFFLE_ASSOCIATE_CHECK_PREFIX,
-    //   { tokenId: postData_.tokenSelId }
-    // );
-
-    // if (
-    //   !_associateTokenCheckResult ||
-    //   !_associateTokenCheckResult.data.result
-    // ) {
-    //   toast.error(
-    //     "A problem occurred during the fungible token associate. Please try again."
-    //   );
-    //   setLoadingView(false);
-    //   return;
-    // }
 
     let _ticketPrice =
       parseFloat(env.CREATE_TICKET_PRICE) + parseFloat(postData_.fallback);
+
+    console.log(">>>>>>>>>>>>>>>1", _ticketPrice, postData_.priceUsd);
+
+    if (postData_.checked) {
+      const amount = parseFloat(env.MS_MONTH_USD / postData_.priceUsd).toFixed(
+        4
+      );
+      postData_["safeAmount"] = amount;
+      _ticketPrice = _ticketPrice + parseFloat(amount);
+    }
+
+    console.log(">>>>>>>>>>>>>>>2", _ticketPrice);
+
     console.log("createTicket", postData_, postData_.fallback, _ticketPrice);
+
     const _sendResult = await sendHbarAndNftToTreasury(
       _ticketPrice,
       postData_.tokenId,
@@ -1516,11 +1541,12 @@ function Raffle() {
       return;
     }
 
-    console.log("*********************", postData_);
+
     const _postResult = await global.postInfoResponse(
       env.SERVER_URL + env.CREATE_TICKET_PREFIX,
       postData_
     );
+    console.log("*********************", _postResult);
     if (!_postResult?.data?.result) {
       toast.error(_postResult.data.error);
       setLoadingView(false);
@@ -1566,14 +1592,22 @@ function Raffle() {
 
   const changeNftSortMode = (value) => {
     //  console.log("changeNftSortMode log - 1 : ", value);
+    const fieldInfos = { HIGH: "ascending", LOW: "descending" };
     setNftSortMode(value);
-    getDbNftData(0, [], value, nftSortType);
+    getDbNftData(0, [], fieldInfos[value], nftSortType);
   };
 
   const changeNftSortType = (value) => {
-    // console.log("changeNftSortType log - 1 : ", event.target.value);
+    const fieldsInfos = {
+      "END SOON": "timeRemain",
+      "CREATED NEW": "createAt",
+      "MOST SOLD": "soldCount",
+      PRICE: "price",
+    };
+
+    console.log("changeNftSortType log - 1 : ", fieldsInfos[value], value);
     setNftSortType(value);
-    getDbNftData(0, [], nftSortMode, value);
+    getDbNftData(0, [], nftSortMode, fieldsInfos[value]);
   };
 
   const handleKeyChange = (e) => {
@@ -1676,14 +1710,16 @@ function Raffle() {
             <ChevronLeftIcon />
           </IconButton>
         </div>
-        
+
         <div className={!open ? "raffle-menu menu-closed" : "raffle-menu"}>
           <div
             className="main-nav-logo"
             onClick={() => {
               window.location.href = "/";
             }}
-          />
+          >
+            <img src={require("../../assets/imgs/navigation/bss.png")} />
+          </div>
           <Tabs
             className={`disp-page-tab ${hidden}`}
             orientation="vertical"
@@ -1691,24 +1727,28 @@ function Raffle() {
             onChange={(event, newValue) => onChangeDispValue(newValue)}
           >
             <Tab
+              title="Home"
               className={dispTabValue == 0 ? "active" : ""}
               icon={<div className="HomeIcon" />}
               aria-label="RAFFLES"
               value="0"
             />
             <Tab
+              title="Wallet"
               className={dispTabValue == 1 ? "active" : ""}
               icon={<div className="WalletIcon" />}
               aria-label="WALLET"
               value="1"
             />
             <Tab
+              title="History"
               className={dispTabValue == 2 ? "active" : ""}
               icon={<div className="PreviousIcon" />}
               aria-label="PREVIOUS"
               tabIndex="2"
             />
             <Tab
+              title="Claim"
               className={dispTabValue == 3 ? "active" : ""}
               icon={<div className="ClaimIcon" />}
               aria-label="CLAIM"
@@ -1731,30 +1771,71 @@ function Raffle() {
         </div>
 
         {/* <Main open={open}> */}
-        <div ref={containerRef} className={!raffleOpen ?  "raffle-wrapper closed" : "raffle-wrapper"}>
+        <div
+          ref={containerRef}
+          className={!raffleOpen ? "raffle-wrapper closed" : "raffle-wrapper"}
+        >
           <div className="space-between">
-            <h1
-              className="page-title"
-              style={{
-                margin:
-                  dispFromValue === FROM_WALLET
-                    ? `5px ${walletNftCardMargin}px`
-                    : `5px ${walletNftCardMargin}px`,
-              }}
-            >
-              {dispFromValue === FROM_WALLET
-                ? "Create Raffle"
-                : dispFromValue === FROM_ACTIVE
-                ? param_raffle_id
-                  ? `Raffle ${String(param_raffle_id).substring(
-                      String(param_raffle_id).length - 4,
-                      String(param_raffle_id).length
-                    )}`
-                  : "Raffles"
-                : dispFromValue === FROM_WINS
-                ? "CLAIM"
-                : "PREVIOUS"}
-            </h1>
+            {!param_raffle_id && (
+              <h1
+                className="page-title"
+                style={{
+                  margin:
+                    dispFromValue === FROM_WALLET
+                      ? `5px ${walletNftCardMargin}px`
+                      : `5px ${walletNftCardMargin}px`,
+                }}
+              >
+                {dispFromValue === FROM_WALLET
+                  ? "Create Raffle"
+                  : dispFromValue === FROM_ACTIVE
+                  ? "Raffles"
+                  : dispFromValue === FROM_WINS
+                  ? "CLAIM"
+                  : "PREVIOUS"}
+              </h1>
+            )}
+            {param_raffle_id &&
+              dbNftInfo?.length &&
+              dbNftInfo.map((item, index) => {
+                return (
+                  <>
+                    <h1
+                      className="page-title"
+                      style={{
+                        margin:
+                          dispFromValue === FROM_WALLET
+                            ? `5px ${walletNftCardMargin}px`
+                            : `5px ${walletNftCardMargin}px`,
+                      }}
+                    >
+                      {`${item.creator} | ${item.name} | #${item.serialNum}`}
+                    </h1>
+                    <h1
+                      className="sub-page-title"
+                      style={{
+                        margin:
+                          dispFromValue === FROM_WALLET
+                            ? `5px ${walletNftCardMargin}px`
+                            : `5px ${walletNftCardMargin}px`,
+                      }}
+                    >
+                      {`COLLECTION NAME: ${item.creator}`}
+                    </h1>
+                    <h1
+                      className="sub-page-title"
+                      style={{
+                        margin:
+                          dispFromValue === FROM_WALLET
+                            ? `5px ${walletNftCardMargin}px`
+                            : `5px ${walletNftCardMargin}px`,
+                      }}
+                    >
+                      {`TOKENID: ${item.tokenId}`}
+                    </h1>
+                  </>
+                );
+              })}
           </div>
           <div
             class={`search-sort-bar ${hidden}`}
@@ -1782,7 +1863,7 @@ function Raffle() {
                     <HighLights
                       onChange={changeNftSortMode}
                       title={"SORT MODE"}
-                      options={["ascending", "descending"]}
+                      options={["HIGH", "LOW"]}
                       value={nftSortMode}
                     />
                   </div>
@@ -1790,7 +1871,12 @@ function Raffle() {
                     <HighLights
                       onChange={changeNftSortType}
                       title={"SORT TYPE"}
-                      options={["timeRemain", "createAt", "soldCount", "price"]}
+                      options={[
+                        "END SOON",
+                        "CREATED NEW",
+                        "MOST SOLD",
+                        "PRICE",
+                      ]}
                       value={nftSortType}
                     />
                   </div>
@@ -1920,7 +2006,14 @@ function Raffle() {
       <Dialog open={scheduleDialog} onClose={() => closeScheduleDialog()}>
         <div className="nft-disp-panel schedule-panel">
           <div className="dialog-title">
-            <p>WEEKLY PAY</p>
+            <p>REMINDER</p>
+          </div>
+          <div className="sub-dialog-title">
+            <p>
+              Your Raffle will draw in a few Hours. Do you want to extend Safe
+              Draw? <br />
+              N/B: This will attract a fee
+            </p>
           </div>
           {scheduleInfo.length > 0 &&
             scheduleInfo.map((item, index_) => {
@@ -1933,8 +2026,29 @@ function Raffle() {
                 />
               );
             })}
+          <Button onClick={closeScheduleDialog} className="btn-reminder-close">
+            <CloseIcon />
+          </Button>
         </div>
       </Dialog>
+
+      <Dialog open={newRaffleDialogOpen} onClose={() => closeNewRaffleDialog()}>
+        <div className="new-raffle-dialog-panel">
+          <img src={require("../../assets/imgs/navigation/pose.png")} />
+          <CloseIcon onClick={() => closeNewRaffleDialog()} />
+          <div className="letter-panel">
+            <p>New to Raffles?</p>
+            <p>
+              Check out this{" "}
+              <a href="https://youtu.be/U9_BH13GoyM" target="_blank">
+                Tutorial
+              </a>{" "}
+              we prepared for you!
+            </p>
+          </div>
+        </div>
+      </Dialog>
+
       <ToastContainer autoClose={3000} draggableDirection="x" />
     </>
   );

@@ -10,7 +10,7 @@ const PenguDialog = ({ titleText, contentText, agreeBtnStr, dialogType, onClickD
                     <p>{titleText}</p>
                 </div>
                 <div className="dialog-content">
-                    <p dangerouslySetInnerHTML={{ __html: contentText }} />
+                    <div dangerouslySetInnerHTML={{ __html: contentText }} />
                 </div>
                 <div className="dialog-control">
                     <img src= {require("assets/imgs/navigation/logo.png")}></img>

@@ -29,27 +29,18 @@ const TicketCreate = ({
   const [minDialog, setMinDialog] = useState(false);
   const [checked, setChecked] = useState(false);
   const [tokenSelId, setTokenSelId] = useState("-1");
+  const [hdbarPriceInfo, setHbarPriceInfo] = useState([]);
 
-  const initSchedule = {
-    isWeeklyFee: false,
-    isRenewFee: false,
-    isDrawWhenSellout: false,
-    isDrawIfNotPay: false,
-  };
-
-  const checkedSchedule = {
-    isWeeklyFee: false,
-    isRenewFee: true,
-    isDrawWhenSellout: false,
-    isDrawIfNotPay: false,
-  };
-
-  const [schedule, setSchedule] = useState(initSchedule);
+  const [schedule, setSchedule] = useState(env.initSchedule);
   useEffect(() => {
     if (accountIds) {
       getTokenInfo();
     }
   }, [accountIds]);
+
+  useEffect(() => {
+    setHbarPriceInfo(global.getTokenPriceInfo(-1, tokenPrices));
+  }, [tokenPrices]);
 
   const handleCheckedChange = (event, key) => {
     console.log(schedule, schedule[key]);
@@ -140,11 +131,13 @@ const TicketCreate = ({
             placeholder="ticket price"
           />
           <Input
+            className={checked ? "disabled" : ""}
             type="number"
             value={timeValue}
             onChange={(e) => {
               setTimeValue(e.target.value);
             }}
+            disabled={checked}
             placeholder="time (hours)"
           />
           <Input
@@ -173,22 +166,23 @@ const TicketCreate = ({
         </div>
 
         <div className="minium-ticket-div">
-          <p>MINIUM TICKET SALES:</p>
+          <p>SAFE DRAW:</p>
           <Checkbox
             onClick={() => {
               setChecked(!checked);
               if (checked) {
-                setSchedule(initSchedule);
+                setSchedule(env.initSchedule);
               } else {
-                setSchedule(checkedSchedule);
+                setSchedule(env.checkedSchedule);
                 setMinDialog(true);
+                setTimeValue(env.MS_MONTH_HOUR);
               }
             }}
             tokenDialog
           ></Checkbox>
         </div>
         <div className="button-div">
-          <Button
+          <Button   title="Collection"
             href={`https://zuse.market/collection/${singleNftInfo.tokenId}`}
             target="_blank"
           >
@@ -209,7 +203,9 @@ const TicketCreate = ({
                 singleNftInfo.name,
                 singleNftInfo.imgUrl,
                 singleNftInfo.floorPrice,
-                schedule
+                schedule,
+                checked,
+                hdbarPriceInfo.priceUsd
               )
             }
           >
@@ -239,20 +235,17 @@ const TicketCreate = ({
       <Dialog open={minDialog} onClose={() => setMinDialog(false)}>
         <div class="raffle-schedule-dialog">
           <div className="dialog-title">
-            <p>MINIUM TICKET SALE</p>
+            <p>SAFE DRAW</p>
           </div>
           <div class="raffle-schedule-div">
-            <p>
-              "Minimum Ticket Sales" is the lowest number of tickets that need
-              to be sold for the raffle drawing to take place. There's a fee
-              after the first free week of hosting.
-            </p>
+          <p>“Safe Draw” allows you to extend the duration of your Raffle to 1 month.</p>
           </div>
           <div class="raffle-schedule-div">
-            <p>If you choose this option:</p>
-            {Object.keys(env.scheduleData).map((item, index) => {
+            {/* <br/> */}
+            <p>NB: Attracts a fee of $3/month</p>
+            {/* {Object.keys(env.scheduleData).map((item, index) => {
               return <p>{env.scheduleData[item]} </p>;
-            })}
+            })} */}
           </div>
         </div>
       </Dialog>

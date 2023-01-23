@@ -10,14 +10,14 @@ const MainFooter = () => {
                     <Button href="https://www.plutopeer.com/" target="_blank">
                         <img alt="..." src={require("assets/imgs/navigation/powered_mark.png")} />
                     </Button>
-                    <p className="ml-3">©2022</p>
-                    <a className="ml-1" href="https://dapp.deragods.com">dapp.deragods.com</a>
+                    <p className="ml-3">©2023</p>
+                    <a className="ml-1" href="https://dapp.deragods.com">app.deragods.com</a>
                 </div>
                 <div className="social-link-buttons">
                     <Button href="https://discord.com/invite/w5ReGR4FuF"  target="_blank">
                         <img alt="..." src={require("assets/imgs/discord-icon.png")} />
                     </Button>
-                    <Button href="https://twitter.com/DeragodsNFT"  target="_blank">
+                    <Button title="Share" href="https://twitter.com/DeragodsNFT"  target="_blank">
                         <img alt="..." src={require("assets/imgs/twitter-icon.png")} />
                     </Button>
                 </div>

@@ -23,7 +23,7 @@ const WalletNftCard = ({ singleNftInfo, nftCardMargin, selectWalletNft }) => {
         {!singleNftInfo.ticked && <div className="verify-icon-unticked" />}
         {singleNftInfo.ticked && <CheckIcon className="verify-icon" />}
         <div className="entry-buy-wrapper">
-          <Button
+          <Button   title="Collection"
             href={`https://zuse.market/collection/${singleNftInfo.tokenId}`}
             target="_blank"
           >

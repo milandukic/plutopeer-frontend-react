@@ -140,7 +140,7 @@ const ListedCollectionCard = ({
           <p className="color-secondary">{`(${totalHbarPrice}$)`}</p>
         </div>
         <div className="list-button-wrapper">
-          <Button
+          <Button   title="Collection"
             href=
             {`https://zuse.market/collection/${collectionInfo.tokenId}`}
             target="_blank"
@@ -157,7 +157,7 @@ const ListedCollectionCard = ({
           </CopyToClipboard>
 
 
-          <Button href="https://twitter.com/DeragodsNFT">
+          <Button title="Share" href="https://twitter.com/DeragodsNFT">
             <TwitterIcon />
           </Button>
           {onClickSwapOfferButton &&

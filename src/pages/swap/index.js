@@ -680,7 +680,7 @@ function Swap() {
             }
             _newDbCollectionInfo.push({
               swapLink:
-                "http://95.217.98.125:3000/swap/" + _tempCollectionData[i]._id,
+                "https://app.deragods.com/swap/" + _tempCollectionData[i]._id,
               accountId: _tempCollectionData[i].accountId,
               swapId: _tempCollectionData[i].swapId,
               nftCount: _tempCollectionData[i].nftCount,

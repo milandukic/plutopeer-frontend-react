@@ -20,6 +20,7 @@ import Admin from "./pages/admin/login";
 // nav var
 import MainNavbar from "components/MainNavbar";
 import MainFooter from "components/MainFooter";
+import { Helmet } from "react-helmet";
 
 const options = {
   // you can also just use 'bottom center'
@@ -38,6 +39,21 @@ const options = {
 function App() {
   return (
     <>
+      <Helmet>
+        <title>DeraGods | Hedera NFT Raffles | NFT Swap | ...</title>
+        <meta
+          name="title"
+          content="DeraGods | Hedera NFT Raffles | NFT Swap | ..."
+        />
+        <meta
+          property="og:image"
+          content="https://i.postimg.cc/BnPNxtdk/og.png"
+        />
+        <meta
+          name="description"
+          content="The new decentralized application (DApp) that aims to be the one-stop shop for all things Hedera."
+        />
+      </Helmet>
       <AlertProvider template={AlertTemplate} {...options}>
         <BrowserRouter>
           <Switch>
@@ -120,7 +136,12 @@ function App() {
             />
             <Route
               path="/nftswapbeta"
-              render={(props) => (<><MainNavbar /><Swap {...props} /></>)}
+              render={(props) => (
+                <>
+                  <MainNavbar />
+                  <Swap {...props} />
+                </>
+              )}
             />
             <Redirect to="/raffle" />
             <Redirect from="/" to="/raffle" />

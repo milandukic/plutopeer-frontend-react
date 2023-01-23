@@ -15,10 +15,14 @@ export const IPFS_URL = "https://hashpack.b-cdn.net/ipfs/";
 export const ZUSE_COLLECTION_URL =
   "https://hedera-nft-backend.herokuapp.com/api/collectionSearch?search=";
 
-export const SERVER_URL = "https://dapp.deragods.com:3306/api";
+export const SERVER_URL = "https://app.deragods.com:3306/api";
+export const SOCKET_URL = "wss://app.deragods.com:56112";
 //export const SERVER_URL = "http://95.217.102.128/api";
-export const SOCKET_URL = "wss://dapp.deragods.com:56112";
 
+// export const SERVER_URL = "http://31.187.74.174/api";
+// export const SOCKET_URL = "ws://31.187.74.174:56112";
+
+//31.187.74.174
 // raffle
 export const CREATE_TICKET_PREFIX = "/tickets/add_tickets";
 export const RAFFLE_ASSOCIATE_CHECK_PREFIX = "/tickets/associate_check";
@@ -56,9 +60,11 @@ export const DELETE_SWAP_OFFER_PREFIX = "/swap/delete_swap_offer";
 export const CLAIM_REQUEST_PREFIX = "/swap/claim_request";
 export const DELETE_COLLECTION_PREFIX = "/swap/delete_collection";
 //Modified by 3
-// export const CREATE_TICKET_PRICE = 10;
-export const CREATE_TICKET_PRICE = 0.01;
-export const MS_WEEK_HOUR = 24 * 7;
+export const CREATE_TICKET_PRICE = 10;
+// export const CREATE_TICKET_PRICE = 0.01;
+export const MS_MONTH_HOUR = 24 * 30;
+export const MS_MONTH_USD = 3;
+export const MS_POPUP_EXTEND = 24 * 3;
 export const RAFFLE_DELAY_MINUTE = 30;
 export const HOT_DELAY_HOUR = 24;
 
@@ -68,4 +74,18 @@ export const scheduleData = {
   isDrawWhenSellout: "The raffle will draw when all the tickets sell out.",
   isDrawIfNotPay:
     "The raffle will also draw if you don't renew the weekly host.",
+};
+
+export const initSchedule = {
+  isWeeklyFee: false,
+  isRenewFee: false,
+  isDrawWhenSellout: false,
+  isDrawIfNotPay: false,
+};
+
+export const checkedSchedule = {
+  isWeeklyFee: false,
+  isRenewFee: true,
+  isDrawWhenSellout: false,
+  isDrawIfNotPay: false,
 };

@@ -103,16 +103,18 @@ const WinsTicket = ({ singleNftInfo, nftCardMargin, onClickSendRequest }) => {
         </div>
         <div className="entry-buy-wrapper">
           <img
+          title="Participants"
             src={require("assets/imgs/navigation/participants.png")}
             onClick={handleOpen}
           />
-          <Button
+          <Button   title="Collection"
             href={`https://zuse.market/collection/${singleNftInfo.tokenId}`}
             target="_blank"
           >
             <InfoIcon />
           </Button>
           <a
+          title="Share"
             className="non-border btn btn-secondary"
             onClick={() => {
               let w = 500;

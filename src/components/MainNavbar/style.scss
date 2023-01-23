@@ -1,8 +1,33 @@
 body {
   background-color: #121619;
+  .nft-name-verify {
+    text-transform: uppercase;
+  }
+
+  .main-background {
+    z-index: -999999;
+    content: " ";
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.3;
+    background-image: url(../../assets/imgs/second-background.png);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+  }
 
   .page-title {
     font-family: Bebas Neue;
+  }
+
+  .css-uhb5lp {
+    background-color: #121619;
+    max-height: none;
+    max-width: none;
   }
   // font-family: Balsamiq Sans;
 }
@@ -22,7 +47,7 @@ body {
   position: absolute;
   right: 10px;
   top: 10px;
-  background-color: #121619;
+  background-color: transparent;
   opacity: 0.9;
   border-radius: 100%;
 
@@ -36,14 +61,14 @@ body {
 }
 
 .nft-circle-hot-logo {
-  background-image: url(../../assets/imgs/navigation/hot.png);
+  background-image: url(../../assets/imgs/navigation/hot.gif);
   background-size: cover;
   width: 50px;
   height: 50px;
   position: absolute;
   right: 10px;
   top: 10px;
-  background-color: #121619;
+  background-color: transparent;
   opacity: 0.9;
   border-radius: 100%;
 }
@@ -54,7 +79,7 @@ body {
   align-items: center;
   justify-content: right;
   height: 10vh;
-  background-color: #121619;
+  background-color: transparent;
   // padding-left: 100px;
   .ml-50 {
     margin-left: 50px !important;
@@ -181,7 +206,7 @@ body {
 
 .main-nav-list-wrapper {
   height: 100vh;
-  background-color: #121619;
+  background-color: #121619;;
 
   .pl-32 {
     padding-left: 32px !important;

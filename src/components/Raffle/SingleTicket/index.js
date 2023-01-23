@@ -58,8 +58,9 @@ const SingleTicket = ({
         ));
 
   useEffect(() => {
-    if (param_raffle_id) setHorizontal("");
-    else setHorizontal("horizontal");
+    // if (param_raffle_id) setHorizontal("");
+    // else setHorizontal("horizontal");
+    setHorizontal("horizontal");
   }, [horizontal]);
 
   useEffect(() => {
@@ -121,7 +122,7 @@ const SingleTicket = ({
       //setWinnerId(wId);
       if (wId == accountIds[0]) setOpen(true);
 
-      console.log("SingleTicket: getRaffleInfo", raffleInfo.data.data);
+      console.log("SingleTicket: getRaffleInfo: Winner", raffleInfo.data.data);
     }
   };
 
@@ -152,6 +153,9 @@ const SingleTicket = ({
           <img className="nft-image" alt="..." src={singleNftInfo.imgUrl}></img>
           {
             <div
+              title={
+                singleNftInfo.nftHotTimeReamin > 0 ? "24h Top Collection" : ""
+              }
               className={
                 singleNftInfo.nftHotTimeReamin > 0
                   ? "nft-circle-hot-logo"
@@ -186,10 +190,13 @@ const SingleTicket = ({
 
         <div className={`single-sub-wrapper`}>
           <div className={`nft-name-verify ${horizontal}`}>
-            <p>{`${singleNftInfo.creator} | ${singleNftInfo.name} #${singleNftInfo.serialNum}`}</p>
+            {!param_raffle_id && (
+              <p>{`${singleNftInfo.creator} | ${singleNftInfo.name} #${singleNftInfo.serialNum}`}</p>
+            )}
           </div>
+
           <div className="nft-token-icon d-flex row m-0">
-            <p className="mr-1">Price/entry:</p>
+            <p className="mr-1">Price/Entry:</p>
             <p className="color-secondary">{`${singleNftInfo.price}`}</p>
             <img src={tokenPriceInfo && tokenPriceInfo.icon} />
           </div>
@@ -197,7 +204,7 @@ const SingleTicket = ({
             <p className="color-secondary">{`(${totalTokenPrice}$)`}</p>
           </div>
           <div className="d-flex row m-0">
-            <p className="mr-1">Time left:</p>
+            <p className="mr-1">Time Left:</p>
             <p className="color-red">
               {singleNftInfo.timeLeft >= 10000
                 ? `${singleNftInfo.timeLeft - 10000}m`
@@ -211,7 +218,7 @@ const SingleTicket = ({
             <p className="color-secondary">{`(${totalHbarPrice}$)`}</p>
           </div>
           <div className="d-flex row m-0">
-            <p className="mr-1">Current entries:</p>
+            <p className="mr-1">Current Entries:</p>
             <p className="current-entry color-third">{`${
               singleNftInfo.soldCount > singleNftInfo.totalCount
                 ? singleNftInfo.totalCount
@@ -220,7 +227,7 @@ const SingleTicket = ({
           </div>
           <div className="d-flex row m-0">
             {ticketType == "buy" && (
-              <p>{`Your entries: ${singleNftInfo.myEntry}`}</p>
+              <p>{`Your Entries: ${singleNftInfo.myEntry}`}</p>
             )}
           </div>
           <div
@@ -238,6 +245,7 @@ const SingleTicket = ({
                 onClick={() => setCopyLink(singleNftInfo.raffleLink)}
               > */}
                   <Button
+                    title="Enter Raffle"
                     className="non-border"
                     onClick={() => {
                       window.open(singleNftInfo.raffleLink, "_blank");
@@ -247,6 +255,7 @@ const SingleTicket = ({
                   </Button>
                 </CopyToClipboard>
                 <Button
+                  title="Collection"
                   href={`https://zuse.market/collection/${singleNftInfo.tokenId}`}
                   target="_blank"
                 >
@@ -254,6 +263,7 @@ const SingleTicket = ({
                 </Button>
 
                 <Button
+                  title="Share"
                   className="non-border"
                   onClick={() => {
                     let w = 500;
@@ -295,31 +305,34 @@ const SingleTicket = ({
               </>
             )}
             {ticketType == "buy" ? (
-              singleNftInfo.ticketStatus != "roulette" && 
-              <Button
-                onClick={() =>
-                  onClickBuyEntry(
-                    singleNftInfo.tokenId,
-                    singleNftInfo.serialNum,
-                    "buy"
-                  )
-                }
-              >
-                BUY
-              </Button>
+              singleNftInfo.ticketStatus != "roulette" && (
+                <Button
+                  onClick={() =>
+                    onClickBuyEntry(
+                      singleNftInfo.tokenId,
+                      singleNftInfo.serialNum,
+                      "buy"
+                    )
+                  }
+                >
+                  BUY
+                </Button>
+              )
             ) : (
-              <Button
-                onClick={() =>
-                  onClickBuyEntry(
-                    singleNftInfo.tokenId,
-                    singleNftInfo.serialNum,
-                    "schedule",
-                    hdbarPriceInfo.priceUsd
-                  )
-                }
-              >
-                Extend
-              </Button>
+              <>
+                <Button
+                  onClick={() =>
+                    onClickBuyEntry(
+                      singleNftInfo.tokenId,
+                      singleNftInfo.serialNum,
+                      "schedule",
+                      hdbarPriceInfo.priceUsd
+                    )
+                  }
+                >
+                  AGREE
+                </Button>
+              </>
             )}
           </div>
         </div>

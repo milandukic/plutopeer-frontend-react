@@ -103,10 +103,11 @@ const SoldTicket = ({ singleNftInfo, nftCardMargin }) => {
         </div>
         <div className="entry-buy-wrapper">
           <img
+            title="Participants"
             src={require("assets/imgs/navigation/participants.png")}
             onClick={handleOpen}
           />
-          <Button
+          <Button   title="Collection"
             href={`https://zuse.market/collection/${singleNftInfo.tokenId}`}
             target="_blank"
           >

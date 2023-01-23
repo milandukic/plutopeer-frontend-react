@@ -105,13 +105,23 @@ function MainNavbar(props) {
     >
       <List>
         <ListItem disablePadding>
-          <ListItemButton href="/stake" className="list-button">
+          <ListItemButton
+            onClick={() => {
+              alert("Coming soon...");
+            }}
+            className="list-button"
+          >
             <img alt="..." src={require("assets/imgs/stake-icon.png")} />
             <ListItemText primary="stake" />
           </ListItemButton>
         </ListItem>
         <ListItem disablePadding>
-          <ListItemButton href="/portal" className="list-button">
+          <ListItemButton
+            onClick={() => {
+              alert("Coming soon...");
+            }}
+            className="list-button"
+          >
             <img alt="..." src={require("assets/imgs/portal-icon.png")} />
             <ListItemText primary="portal" />
           </ListItemButton>
@@ -126,19 +136,31 @@ function MainNavbar(props) {
           </ListItemButton>
         </ListItem>
         <ListItem disablePadding>
-          <ListItemButton href="/dao" className="list-button">
+          <ListItemButton
+            onClick={() => {
+              alert("Coming soon...");
+            }}
+            className="list-button"
+          >
             <img alt="..." src={require("assets/imgs/dao-icon.png")} />
             <ListItemText primary="dao" />
           </ListItemButton>
         </ListItem>
         <ListItem disablePadding>
-          <ListItemButton href="/swap" className="list-button">
+          <ListItemButton             onClick={() => {
+              alert("Coming soon...");
+            }} className="list-button">
             <img alt="..." src={require("assets/imgs/swap-icon.png")} />
             <ListItemText primary="NFT swap" />
           </ListItemButton>
         </ListItem>
         <ListItem disablePadding>
-          <ListItemButton href="/loans" className="list-button">
+          <ListItemButton
+            onClick={() => {
+              alert("Coming soon...");
+            }}
+            className="list-button"
+          >
             <img alt="..." src={require("assets/imgs/loan-icon.png")} />
             <ListItemText primary="loans" />
           </ListItemButton>
@@ -149,6 +171,7 @@ function MainNavbar(props) {
 
   return (
     <div className="main-nav-container">
+      <div className="main-background"></div>
       <div className="main-nav-wrapper">
         <div className="nav-links">
           <Button

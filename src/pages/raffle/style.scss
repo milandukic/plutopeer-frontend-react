@@ -16,7 +16,7 @@ canvas#canvas {
   flex-direction: row;
   align-items: flex-start;
   position: relative;
-  background-color: #121619;
+  background-color: transparent;
 
   //**************created new css - start******************
   .vertical-navigation {
@@ -71,8 +71,9 @@ canvas#canvas {
         color: gray;
       }
 
-      .css-1d3z3hw-MuiOutlinedInput-notchedOutline,
-      .css-14s5rfu-MuiFormLabel-root-MuiInputLabel-root {
+      .MuiOutlinedInput-notchedOutline,
+      // .css-14s5rfu-MuiFormLabel-root-MuiInputLabel-root ,
+      .MuiInputLabel-animated {
         border-color: #23f06f;
         color: white;
       }
@@ -120,6 +121,17 @@ canvas#canvas {
     background-size: 100px;
     background-repeat: no-repeat;
     background-position: top;
+    position: relative;
+
+    img {
+      max-width: 100%;
+      border-radius: 1px;
+      width: 20px;
+      height: 20px;
+      position: absolute;
+      bottom: 0px;
+      right: 20px;
+    }
   }
 
   .main-raffle-open {
@@ -186,11 +198,12 @@ canvas#canvas {
   }
 
   .raffle-menu {
-    background-color: #121619;
+    background-color: transparent;
     width: 10%;
     height: 100%;
     min-width: 100px;
     overflow-y: auto;
+    overflow-x: hidden;
     min-height: 320px;
     display: flex;
     flex-direction: column;
@@ -203,7 +216,7 @@ canvas#canvas {
 
   .disp-page-tab {
     padding-top: 30px;
-    background-color: #121619;
+    background-color: transparent;
     width: 10%;
     min-width: 100px;
     margin: 0 auto;
@@ -299,7 +312,7 @@ canvas#canvas {
 
   //modified by 3
   .refresh-data-button {
-    background-color: #5646fe;
+    // background-color: #5646fe;
     padding: 0;
     margin-right: 20px;
     border-radius: 3px;
@@ -319,13 +332,13 @@ canvas#canvas {
 
   .space-between {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: space-between;
   }
 
   .raffle-wrapper {
     //background-image: url("../../assets/imgs/unfocused-wallpaper.png");
-    background-color: #121619;
+    background-color: transparent;
     background-size: cover;
     background-repeat: no-repeat;
     background-position: top;
@@ -336,7 +349,7 @@ canvas#canvas {
     // position: relative;
     min-height: 320px;
     border: 1px solid grey;
-
+    border-bottom: none;
     &.closed {
       display: none;
     }
@@ -419,6 +432,14 @@ canvas#canvas {
     margin: 0;
   }
 
+  .sub-page-title {
+    color: rgba(200, 200, 200, 1);
+    text-transform: uppercase;
+    font-size: 15px;
+    font-weight: 600;
+    margin: 0;
+  }
+
   .disp-from-controllable-states {
     width: 180px;
 
@@ -466,6 +487,7 @@ canvas#canvas {
 }
 
 .nft-disp-panel {
+  width: 100%;
   margin-top: 20px;
   border-radius: 3%;
   h1 {
@@ -492,6 +514,79 @@ canvas#canvas {
         text-align: center;
       }
     }
+
+    .sub-dialog-title {
+      p {
+        font-size: 20px;
+        margin-bottom: 30px;
+        color: white;
+        text-align: left;
+        font-weight: 700;
+        text-transform: none;
+      }
+    }
+
+    .btn-reminder-close {
+      background-color: transparent;
+      position: absolute;
+      right: 20px;
+      bottom: 20px;
+      border: solid 1px;
+      padding: 0px;
+    }
+  }
+}
+
+.new-raffle-dialog-panel {
+  position: fixed;
+  right: 5%;
+  bottom: 5%;
+  background-color: white;
+  border-radius: 10px;
+  padding: 5px;
+
+  max-width: 400px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: left;
+
+  p {
+    margin-bottom: 0px;
+    color: black;
+    font-weight: 600;
+  }
+
+  .letter-panel {
+    margin-left: 100px;
+    margin-right: 20px;
+    p:nth-child(1) {
+      font-size: 26px;
+      color: #5440eb;
+    }
+    p:nth-child(2) {
+      a {
+        color: #4d42a1;
+      }
+    }
+  }
+
+  svg {
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    border: 2px solid;
+    color: #5440eb;
+    border-color: #5440eb;
+    font-weight: 700px;
+    border-radius: 100%;
+  }
+
+  img {
+    position: absolute;
+    width: 110px;
+    left: -10px;
+    bottom: -10px;
   }
 }
 
